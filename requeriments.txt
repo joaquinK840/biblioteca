@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pydantic
+pandas
+python-multipart
+jinja2
+sqlalchemy
+psycopg2-binary
+alembic
+python-dotenv

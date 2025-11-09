@@ -1,0 +1,25 @@
+# Entorno virtual
+venv/
+.env
+
+# Archivos de compilación
+__pycache__/
+*.pyc
+*.pyo
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de datos temporales
+*.log
+*.csv
+*.json.bak
+
+# Archivos de VSCode y PyCharm
+.vscode/
+.idea/
+
+# Archivos de pruebas o builds
+dist/
+build/
