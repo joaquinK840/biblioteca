@@ -107,13 +107,5 @@ CREATE TABLE IF NOT EXISTS metadata (
 );
 
 -- ===========================
--- VISTAS UTILES (opcional)
--- ===========================
--- Vista para ver stock y datos relevantes del libro
-CREATE OR REPLACE VIEW vw_libros_stock AS
-SELECT l.id, l.isbn, l.titulo, l.autor, l.peso, l.valor, l.stock
-FROM libros l;
-
--- ===========================
 -- FIN del script
 -- ===========================
