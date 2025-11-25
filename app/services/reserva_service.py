@@ -6,7 +6,7 @@ from typing import List, Optional
 from app.models.reserva_model import Reserva
 from app.services.libro_service import LibroService
 from app.services.user_service import UsuarioService
-from app.structures.cola import Cola
+from app.utils.structures.cola import Cola
 
 CSV_PATH = "app/db/data/reservas.csv"
 

@@ -7,7 +7,7 @@ from app.models.prestamo_model import Prestamo
 from app.models.libro_model import Libro
 from app.services.libro_service import LibroService
 from app.services.user_service import UsuarioService
-from app.structures.pila import Pila
+from app.utils.structures.pila import Pila
 from app.services.reserva_service import ReservaService  # para procesar reservas
 
 CSV_PATH = "app/db/data/prestamos.csv"
