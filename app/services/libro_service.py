@@ -3,6 +3,7 @@ from app.models.libro_model import Libro
 from typing import List, Optional
 import os
 from app.utils.libros.librosOrdenados import libros_ordenados_isbn
+from app.utils.libros.libroSort import ordenar_libros_por_precio
 
 CSV_PATH = "app/db/data/libros.csv"
 
@@ -67,5 +68,11 @@ class LibroService:
     @staticmethod
     def ordernar_por_isbn() -> List[Libro]:
         libros = LibroService.cargar_libros()
-        ordedados = libros_ordenados_isbn(libros)
-        return ordedados
+        ordedanados = libros_ordenados_isbn(libros)
+        return ordedanados
+    
+    @staticmethod
+    def obtener_por_precio():
+        libros= LibroService.cargar_libros()
+        ordenados=ordenar_libros_por_precio(libros)
+        return ordenados

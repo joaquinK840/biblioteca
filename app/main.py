@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from app.routes.libro_routes import router as libros_router
+from app.routes.user_routes import router as user_router
 
 app = FastAPI(title="CSV Library API")
 
 app.include_router(libros_router)
+app.include_router(user_router)
 
 @app.get("/")
 def root():

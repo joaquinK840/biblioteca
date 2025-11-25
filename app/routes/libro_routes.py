@@ -28,3 +28,7 @@ def eliminar(isbn: str):
 @router.get("/ordenados/isbn", response_model=List[LibroOut])
 def obtener_libros_ordenados_isbn():
     return LibroController.libros_ordenados_isbn()
+
+@router.get("/ordenados/precio", response_model=List[LibroOut])
+def obtener_libros_ordenados_precio():
+    return LibroController.libros_ordenados_precio()
