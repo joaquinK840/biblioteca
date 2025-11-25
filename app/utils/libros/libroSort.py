@@ -1,30 +1,38 @@
 def ordenar_libros_por_precio(libros):
-    # Merge Sort completo y recursivo
+
     def merge_sort(lista):
-        # Caso base
         if len(lista) <= 1:
             return lista
-        medio = len(lista) // 2
-        izquierda = merge_sort(lista[:medio])
-        derecha = merge_sort(lista[medio:])
-        return merge(izquierda, derecha)
+        
+        mid = len(lista) // 2
+        left = merge_sort(lista[:mid])
+        right = merge_sort(lista[mid:])
+        return merge(left, right)
 
-    def merge(izq, der):
+    def merge(left, right):
         resultado = []
         i = j = 0
 
-        # Comparación basada en el atributo valor
-        while i < len(izq) and j < len(der):
-            if izq[i].valor <= der[j].valor:
-                resultado.append(izq[i])
+        # Mezclar ordenado por valor (int)
+        while i < len(left) and j < len(right):
+            if left[i].valor <= right[j].valor:
+                resultado.append(left[i])
                 i += 1
             else:
-                resultado.append(der[j])
+                resultado.append(right[j])
                 j += 1
-        # Agregar cualquier sobrante
-        resultado.extend(izq[i:])
-        resultado.extend(der[j:])
+
+        # Agregar lo que sobra
+        while i < len(left):
+            resultado.append(left[i])
+            i += 1
+
+        while j < len(right):
+            resultado.append(right[j])
+            j += 1
+
         return resultado
-    # Ejecutar merge sort
+
+    # IMPORTANTE: ¡retornar el resultado!
     lista_ordenada = merge_sort(libros)
     return lista_ordenada

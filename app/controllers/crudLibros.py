@@ -44,14 +44,14 @@ class LibroController:
     
     @staticmethod
     def libros_ordenados_isbn():
-        libros = LibroService.cargar_libros()
+        libros = LibroService.ordernar_por_isbn()
         if not libros:
             raise HTTPException(status_code=404, detail="No hay libros para ordenar")
         return libros
     
     @staticmethod
     def libros_ordenados_precio():
-        libros = LibroService.cargar_libros()
+        libros = LibroService.obtener_por_precio()
         if not libros:
             raise HTTPException(status_code=404, detail="No hay libros para ordenar")
         return libros
