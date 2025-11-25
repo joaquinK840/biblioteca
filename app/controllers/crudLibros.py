@@ -7,7 +7,7 @@ class LibroController:
 
     @staticmethod
     def listar_libros():
-        return LibroService.obtener_todos()
+        return LibroService.cargar_libros()
 
     @staticmethod
     def obtener_libro(isbn: str):

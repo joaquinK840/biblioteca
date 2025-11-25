@@ -2,6 +2,7 @@ import csv
 from app.models.libro_model import Libro
 from typing import List, Optional
 import os
+from app.utils.libros.librosOrdenados import libros_ordenados_isbn
 
 CSV_PATH = "app/db/data/libros.csv"
 
@@ -24,10 +25,6 @@ class LibroService:
             writer.writeheader()
             for libro in libros:
                 writer.writerow(libro.__dict__)
-
-    @staticmethod
-    def obtener_todos() -> List[Libro]:
-        return LibroService.cargar_libros()
 
     @staticmethod
     def obtener_por_isbn(isbn: str) -> Optional[Libro]:
@@ -66,3 +63,9 @@ class LibroService:
             return False
         LibroService.guardar_libros(nuevos)
         return True
+
+    @staticmethod
+    def ordernar_por_isbn() -> List[Libro]:
+        libros = LibroService.cargar_libros()
+        ordedados = libros_ordenados_isbn(libros)
+        return ordedados
