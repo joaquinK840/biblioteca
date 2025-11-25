@@ -13,7 +13,6 @@ Thumbs.db
 
 # Archivos de datos temporales
 *.log
-*.csv
 *.json.bak
 
 # Archivos de VSCode y PyCharm
