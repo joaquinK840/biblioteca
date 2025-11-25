@@ -41,3 +41,10 @@ class LibroController:
         if not eliminado:
             raise HTTPException(status_code=404, detail="Libro no encontrado")
         return {"message": "Libro eliminado"}
+    
+    @staticmethod
+    def libros_ordenados_isbn():
+        libros = LibroService.cargar_libros()
+        if not libros:
+            raise HTTPException(status_code=404, detail="No hay libros para ordenar")
+        return libros

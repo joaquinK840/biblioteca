@@ -24,3 +24,7 @@ def actualizar(isbn: str, data: LibroUpdate):
 @router.delete("/{isbn}")
 def eliminar(isbn: str):
     return LibroController.eliminar_libro(isbn)
+
+@router.get("/ordenados/isbn", response_model=List[LibroOut])
+def obtener_libros_ordenados_isbn():
+    return LibroController.libros_ordenados_isbn()
