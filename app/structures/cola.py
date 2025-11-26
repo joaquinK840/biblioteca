@@ -1,5 +1,3 @@
-# app/structures/cola.py
-
 class Cola:
     """Estructura FIFO para cola de reservas por libro."""
 
