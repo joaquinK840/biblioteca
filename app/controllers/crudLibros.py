@@ -55,3 +55,17 @@ class LibroController:
         if not libros:
             raise HTTPException(status_code=404, detail="No hay libros para ordenar")
         return libros
+    
+    @staticmethod
+    def estanteria_deficiente():
+        libros = LibroService.estanteria_deficiente()
+        if not libros:
+            raise HTTPException(status_code=404, detail="No hay libros para organizar")
+        return libros
+    
+    @staticmethod
+    def estanteria_optima():    
+        libros = LibroService.estanteria_optima()
+        if not libros:
+            raise HTTPException(status_code=404, detail="No hay libros para organizar")
+        return libros

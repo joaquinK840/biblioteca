@@ -4,7 +4,8 @@ from typing import List, Optional
 import os
 from app.utils.libros.librosOrdenados import libros_ordenados_isbn
 from app.utils.libros.libroSort import ordenar_libros_por_precio
-
+from app.utils.libros.estanterias_fuerzaBruta import estanterias_fuerzaBruta
+from app.utils.libros.estanteria_backtracking import estanteria_backtracking
 CSV_PATH = "app/db/data/libros.csv"
 
 class LibroService:
@@ -76,3 +77,15 @@ class LibroService:
         libros= LibroService.cargar_libros()
         ordenados=ordenar_libros_por_precio(libros)
         return ordenados
+    
+    @staticmethod
+    def estanteria_deficiente():
+        libros = LibroService.cargar_libros()
+        deficientes = estanterias_fuerzaBruta(libros)
+        return deficientes
+    
+    @staticmethod
+    def estanteria_optima():
+        libros = LibroService.cargar_libros()
+        optimas = estanteria_backtracking(libros)  # Aquí iría la llamada al algoritmo óptimo
+        return optimas
