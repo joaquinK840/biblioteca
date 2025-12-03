@@ -1,4 +1,19 @@
+
 def estanterias_fuerzaBruta(libros):
+    """Búsqueda por fuerza bruta de combinaciones de 4 libros cuyo peso supera un umbral.
+
+Función:
+- estanterias_fuerzaBruta(libros)
+  - Recibe:
+    * libros: lista de objetos con atributo `peso` y `titulo`.
+  - Devuelve:
+    * lista de diccionarios con claves:
+      - "libros": lista de títulos de la combinación
+      - "peso_total": suma de los pesos de los 4 libros
+  - Comportamiento:
+    * Recorre todas las combinaciones de 4 elementos sin repetición (O(n^4)).
+    * Añade a resultado las combinaciones cuyo peso_total > 8.
+"""
     resultado = []
     n = len(libros)
 

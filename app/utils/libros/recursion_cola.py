@@ -1,5 +1,24 @@
+
 def peso_promedio_tail_con_libros(libros, index=0, acumulado=0, contador=0, titulos=None):
-    """Recursión de cola: calcula peso promedio mostrando los libros y traza por consola."""
+    """Recursión de cola (tail recursion) para calcular promedio de peso de libros.
+
+Función:
+- peso_promedio_tail_con_libros(libros, index=0, acumulado=0, contador=0, titulos=None)
+  - Recibe:
+    * libros: lista de objetos con atributos 'titulo' y 'peso'.
+    * index: índice actual (inicia en 0).
+    * acumulado: suma acumulada de pesos (float).
+    * contador: número de elementos procesados (int).
+    * titulos: lista acumulada de títulos (interna; se inicializa si es None).
+  - Devuelve:
+    * (promedio: float, titulos: list[str])
+      - promedio: promedio de peso (0 si contador==0).
+      - titulos: lista de títulos en orden de recorrido.
+  - Comportamiento:
+    * Imprime trazas por consola en cada llamada para debugging.
+    * Realiza tail recursion; en Python no hay optimización de tail recursion,
+      por lo que para listas muy largas puede desbordar la pila.
+"""
     if titulos is None:
         titulos = []
 

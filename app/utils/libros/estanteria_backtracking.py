@@ -1,4 +1,19 @@
+
 def estanteria_backtracking(libros, peso_max=8.0):
+    """Algoritmo de backtracking para asignar estanterías optimizando valor sin superar peso.
+
+Función:
+- estanteria_backtracking(libros, peso_max=8.0)
+  - Recibe:
+    * libros: lista de objetos con atributos al menos 'titulo', 'peso', 'valor'.
+    * peso_max: límite de peso por estantería (float).
+  - Devuelve:
+    * dict {"resultado": [ { "estanteria": int, "libros": [titulos], "peso_total": float, "precio_total": float }, ... ] }
+  - Efectos secundarios:
+    * Añade/establece el atributo `estanteria` en cada objeto libro para indicar la estantería asignada (0 = sin asignar).
+  - Nota:
+    * Intenta empaquetar libros en estanterías maximizando valor sin exceder `peso_max`, con hasta 4 libros por estantería.
+"""
     # ========== 1. AGREGAR EL CAMPO ESTANTERIA A CADA LIBRO ==========
     for libro in libros:
         setattr(libro, "estanteria", 0)

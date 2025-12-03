@@ -1,14 +1,21 @@
-from app.schemas.estanterias_optimas_schema import (
-    EstanteriaOptima,
-    EstanteriasOptimasResponse
-)
+
+from app.schemas.estanterias_optimas_schema import (EstanteriaOptima,
+                                                    EstanteriasOptimasResponse)
+
 
 def adaptar_estanterias_optimas(resultado_algo):
+    """Adaptador: convierte la salida del algoritmo de estanterías al schema de respuesta.
+    
+    Función:
+    - adaptar_estanterias_optimas(resultado_algo)
+      - Recibe:
+        * resultado_algo: dict con clave "resultado" conteniendo lista de dicts con claves:
+          - "estanteria", "libros", "peso_total", "precio_total"
+      - Devuelve:
+        * Instancia de EstanteriasOptimasResponse (schema) con la lista de EstanteriaOptima.
+      - Requiere:
+        * Que los schemas EstanteriaOptima y EstanteriasOptimasResponse estén disponibles e importables.
     """
-    Convierte el resultado del algoritmo de backtracking
-    al schema EstanteriasOptimasResponse.
-    """
-
     estanterias = []
 
     for est in resultado_algo["resultado"]:
