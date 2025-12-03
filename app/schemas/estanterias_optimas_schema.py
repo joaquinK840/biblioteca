@@ -1,4 +1,3 @@
-# app/schemas/estanteria2_schema.py
 from typing import List
 from pydantic import BaseModel
 
@@ -10,4 +9,3 @@ class EstanteriaOptima(BaseModel):
 
 class EstanteriasOptimasResponse(BaseModel):
     resultado: List[EstanteriaOptima]
-

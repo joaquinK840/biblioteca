@@ -1,3 +1,4 @@
+# app/controllers/crudLibros.py
 from fastapi import HTTPException
 from app.schemas.libro_schema import LibroCreate, LibroUpdate, LibroOut
 from app.models.libro_model import Libro
@@ -69,3 +70,17 @@ class LibroController:
         if not libros:
             raise HTTPException(status_code=404, detail="No hay libros para organizar")
         return libros
+    
+    @staticmethod
+    def valor_total_autor(autor: str):
+        resultado = LibroService.valor_total_por_autor(autor)
+        if resultado is None:
+            raise HTTPException(status_code=404, detail="Autor no encontrado")
+        return {"autor": autor, **resultado}
+
+    @staticmethod
+    def peso_promedio_autor(autor: str):
+        resultado = LibroService.peso_promedio_por_autor(autor)
+        if resultado is None:
+            raise HTTPException(status_code=404, detail="Autor no encontrado")
+        return {"autor": autor, **resultado}

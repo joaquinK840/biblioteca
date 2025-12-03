@@ -1,3 +1,4 @@
+# app/services/libro_service.py
 import csv
 from app.models.libro_model import Libro
 from typing import List, Optional
@@ -6,6 +7,10 @@ from app.utils.libros.librosOrdenados import libros_ordenados_isbn
 from app.utils.libros.libroSort import ordenar_libros_por_precio
 from app.utils.libros.estanterias_fuerzaBruta import estanterias_fuerzaBruta
 from app.utils.libros.estanteria_backtracking import estanteria_backtracking
+from app.utils.libros.adaptador_estanteria import adaptar_estanterias_optimas
+from app.utils.libros.recursion_pila import valor_total_recursivo_con_libros
+from app.utils.libros.recursion_cola import peso_promedio_tail_con_libros
+
 CSV_PATH = "app/db/data/libros.csv"
 
 class LibroService:
@@ -84,8 +89,32 @@ class LibroService:
         deficientes = estanterias_fuerzaBruta(libros)
         return deficientes
     
+
+
     @staticmethod
     def estanteria_optima():
         libros = LibroService.cargar_libros()
-        optimas = estanteria_backtracking(libros)  # Aquí iría la llamada al algoritmo óptimo
-        return optimas
+        salida = estanteria_backtracking(libros)
+        return adaptar_estanterias_optimas(salida)
+    
+    @staticmethod
+    def valor_total_por_autor(autor: str):
+        libros = [l for l in LibroService.cargar_libros() if l.autor == autor]
+        if not libros:
+            return None
+
+        total, titulos = valor_total_recursivo_con_libros(libros, len(libros) - 1)
+        return {"valor_total": total, "libros": titulos}
+
+
+    @staticmethod
+    def peso_promedio_por_autor(autor: str):
+        libros = [l for l in LibroService.cargar_libros() if l.autor == autor]
+        if not libros:
+            return None
+
+        promedio, titulos = peso_promedio_tail_con_libros(libros)
+        return {"peso_promedio": promedio, "libros": titulos}
+
+
+

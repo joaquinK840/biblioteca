@@ -1,42 +1,80 @@
 def estanteria_backtracking(libros, peso_max=8.0):
-    def backtrack(indice, peso_actual, valor_actual, combinacion):
-        nonlocal mejor_valor, mejor_comb
+    # ========== 1. AGREGAR EL CAMPO ESTANTERIA A CADA LIBRO ==========
+    for libro in libros:
+        setattr(libro, "estanteria", 0)
 
-        # Si ya excede peso, cortar rama
-        if peso_actual > peso_max:
-            return
-        
-        # Si llegamos al final, evaluar solución
-        if indice == n:
-            if valor_actual > mejor_valor:
-                mejor_valor = valor_actual
-                mejor_comb = combinacion.copy()
-            return
+    # ========== 2. CALCULAR NUMERO DE ESTANTERIAS ==========
+    total_libros = len(libros)
+    num_estanterias = (total_libros // 4) + 1
 
-        libro = libros[indice]
+    resultado_final = []
 
-        # OPCIÓN 1: Incluir libro si no pasa el límite
-        if peso_actual + libro.peso <= peso_max:
-            combinacion.append(libro)
-            backtrack(
-                indice + 1,
-                peso_actual + libro.peso,
-                valor_actual + libro.valor,
-                combinacion
-            )
-            combinacion.pop()
+    # ========== 3. ITERAR ESTANTERIA POR ESTANTERIA ==========
+    for num_est in range(1, num_estanterias + 1):
+        # Filtrar solo libros sin estantería asignada
+        disponibles = [l for l in libros if l.estanteria == 0]
 
-        # OPCIÓN 2: NO incluir libro
-        backtrack(indice + 1, peso_actual, valor_actual, combinacion)
+        # Si ya no quedan libros → salir
+        if not disponibles:
+            break
 
-    mejor_valor = 0
-    mejor_comb = []
-    n = len(libros)
-    # Llamar al backtracking
-    backtrack(0, 0, 0, [])
+        # ======== BACKTRACKING PARA ESTA ESTANTERÍA =========
+        mejor_valor = 0
+        mejor_comb = []
 
-    return {
-        "libros": [l.titulo for l in mejor_comb],
-        "peso_total": sum(l.peso for l in mejor_comb),
-        "precio_total": sum(l.valor for l in mejor_comb)
-    }
+        n = len(disponibles)
+
+        def backtrack(indice, peso_actual, valor_actual, seleccion):
+            nonlocal mejor_valor, mejor_comb
+
+            # no más de 4 libros por estantería
+            if len(seleccion) > 4:
+                return
+
+            # peso no puede exceder
+            if peso_actual > peso_max:
+                return
+
+            # fin del árbol
+            if indice == n:
+                if valor_actual > mejor_valor:
+                    mejor_valor = valor_actual
+                    mejor_comb = seleccion.copy()
+                return
+
+            libro = disponibles[indice]
+
+            # opción 1: tomarlo
+            if peso_actual + float(libro.peso) <= peso_max:
+                seleccion.append(libro)
+                backtrack(
+                    indice + 1,
+                    peso_actual + float(libro.peso),
+                    valor_actual + float(libro.valor),
+                    seleccion
+                )
+                seleccion.pop()
+
+            # opción 2: no tomarlo
+            backtrack(indice + 1, peso_actual, valor_actual, seleccion)
+
+        # Llamar backtracking
+        backtrack(0, 0, 0, [])
+
+        # ========= SI NO ENCUENTRA NADA, TERMINA =========
+        if not mejor_comb:
+            break
+
+        # ========= ASIGNAR LA ESTANTERIA A LOS LIBROS =========
+        for libro in mejor_comb:
+            libro.estanteria = num_est
+
+        # ========= GUARDAR RESULTADO =========
+        resultado_final.append({
+            "estanteria": num_est,
+            "libros": [l.titulo for l in mejor_comb],
+            "peso_total": sum(float(l.peso) for l in mejor_comb),
+            "precio_total": sum(float(l.valor) for l in mejor_comb)
+        })
+
+    return {"resultado": resultado_final}
