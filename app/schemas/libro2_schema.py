@@ -1,6 +1,8 @@
+# app/schemas/libro2_schema.py
 from pydantic import BaseModel
 
-class LibroBase(BaseModel):
+class Libro2Schema(BaseModel):
+    isbn: str
     titulo: str
     autor: str
     peso: float
@@ -10,12 +12,3 @@ class LibroBase(BaseModel):
     editorial: str
     idioma: str
     estanteria: int
-
-class LibroCreate(LibroBase):
-    isbn: str
-
-class LibroUpdate(LibroBase):
-    pass
-
-class LibroOut(LibroBase):
-    isbn: str

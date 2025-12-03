@@ -1,5 +1,18 @@
+
 def libros_ordenados_isbn(libros):
-    """Ordena la lista de libros por `isbn` usando el algoritmo
+    """
+    Ordenamiento por ISBN usando Insertion Sort.
+
+Función:
+- libros_ordenados_isbn(libros)
+  - Recibe:
+    * libros: lista de objetos con atributo `isbn`.
+  - Devuelve:
+    * nueva lista ordenada ascendentemente por `isbn`.
+  - Implementación:
+    * Inserción iterativa construyendo una lista ordenada nueva.
+    
+    Ordena la lista de libros por `isbn` usando el algoritmo
     de Ordenamiento por Inserción (Insertion Sort).
 
     La función recibe una lista de objetos `Libro` y devuelve una

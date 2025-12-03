@@ -1,4 +1,16 @@
+
 def ordenar_libros_por_precio(libros):
+    """Ordenamiento de libros por precio/valor usando merge sort.
+
+Función pública:
+- ordenar_libros_por_precio(libros)
+  - Recibe:
+    * libros: lista de objetos que tienen al menos el atributo `valor` (numérico o convertible a float).
+  - Devuelve:
+    * lista ordenada ascendentemente según el atributo `valor`.
+  - Nota:
+    * No modifica la lista original (se crea y retorna una lista nueva).
+"""
 
     def merge_sort(lista):
         if len(lista) <= 1:

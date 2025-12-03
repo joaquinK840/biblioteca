@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from app.controllers.crudUser import UsuarioController
 from app.schemas.user_schema import UsuarioCreate, UsuarioUpdate
 
-router = APIRouter(prefix="/usuarios")
+router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
 
 @router.get("/")
 def listar():

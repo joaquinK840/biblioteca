@@ -1,16 +1,31 @@
+# app/controllers/crudLibros.py
 from fastapi import HTTPException
-from app.schemas.libro_schema import LibroCreate, LibroUpdate, LibroOut
+
 from app.models.libro_model import Libro
+from app.schemas.libro_schema import LibroCreate, LibroOut, LibroUpdate
 from app.services.libro_service import LibroService
+
 
 class LibroController:
 
     @staticmethod
     def listar_libros():
+        """Listar todos los libros.
+
+        Parámetros: ninguno.
+        Retorna: List[Libro].
+        """
         return LibroService.cargar_libros()
 
     @staticmethod
     def obtener_libro(isbn: str):
+        """Obtener un libro por ISBN.
+
+        Parámetros:
+        - isbn: str
+        Retorna: Libro si existe.
+        Lanza: HTTPException 404 si no se encuentra.
+        """
         libro = LibroService.obtener_por_isbn(isbn)
         if not libro:
             raise HTTPException(status_code=404, detail="Libro no encontrado")
@@ -18,6 +33,13 @@ class LibroController:
 
     @staticmethod
     def crear_libro(data: LibroCreate):
+        """Crear un libro nuevo.
+
+        Parámetros:
+        - data: LibroCreate
+        Retorna: Libro creado.
+        Lanza: HTTPException 400 si el ISBN ya existe.
+        """
         libro = Libro(**data.dict())
         nuevo = LibroService.crear(libro)
         if not nuevo:
@@ -26,6 +48,14 @@ class LibroController:
 
     @staticmethod
     def actualizar_libro(isbn: str, data: LibroUpdate):
+        """Actualizar un libro por ISBN.
+
+        Parámetros:
+        - isbn: str
+        - data: LibroUpdate
+        Retorna: Libro actualizado.
+        Lanza: HTTPException 404 si no se encuentra.
+        """
         libro_actualizado = Libro(
             isbn=isbn,
             **data.dict()
@@ -37,6 +67,13 @@ class LibroController:
 
     @staticmethod
     def eliminar_libro(isbn: str):
+        """Eliminar un libro por ISBN.
+
+        Parámetros:
+        - isbn: str
+        Retorna: dict con mensaje de éxito.
+        Lanza: HTTPException 404 si no se encuentra.
+        """
         eliminado = LibroService.eliminar(isbn)
         if not eliminado:
             raise HTTPException(status_code=404, detail="Libro no encontrado")
@@ -44,6 +81,11 @@ class LibroController:
     
     @staticmethod
     def libros_ordenados_isbn():
+        """Devolver libros ordenados por ISBN.
+
+        Parámetros: ninguno.
+        Retorna: lista ordenada o HTTPException 404 si no hay libros.
+        """
         libros = LibroService.ordernar_por_isbn()
         if not libros:
             raise HTTPException(status_code=404, detail="No hay libros para ordenar")
@@ -51,7 +93,62 @@ class LibroController:
     
     @staticmethod
     def libros_ordenados_precio():
+        """Devolver libros ordenados por precio/valor.
+
+        Parámetros: ninguno.
+        Retorna: lista ordenada o HTTPException 404 si no hay libros.
+        """
         libros = LibroService.obtener_por_precio()
         if not libros:
             raise HTTPException(status_code=404, detail="No hay libros para ordenar")
         return libros
+    
+    @staticmethod
+    def estanteria_deficiente():
+        """Detectar combinaciones deficientes (fuerza bruta).
+
+        Parámetros: ninguno.
+        Retorna: lista de combinaciones o HTTPException 404 si no hay datos.
+        """
+        libros = LibroService.estanteria_deficiente()
+        if not libros:
+            raise HTTPException(status_code=404, detail="No hay libros para organizar")
+        return libros
+    
+    @staticmethod
+    def estanteria_optima():    
+        """Calcular y devolver estanterías óptimas (backtracking).
+
+        Parámetros: ninguno.
+        Retorna: EstanteriasOptimasResponse o HTTPException 404 si no hay datos.
+        """
+        libros = LibroService.estanteria_optima()
+        if not libros:
+            raise HTTPException(status_code=404, detail="No hay libros para organizar")
+        return libros
+    
+    @staticmethod
+    def valor_total_autor(autor: str):
+        """Calcular valor total de libros de un autor.
+
+        Parámetros:
+        - autor: str
+        Retorna: dict con 'autor', 'valor_total' y 'libros' o HTTPException 404 si no hay coincidencias.
+        """
+        resultado = LibroService.valor_total_por_autor(autor)
+        if resultado is None:
+            raise HTTPException(status_code=404, detail="Autor no encontrado")
+        return {"autor": autor, **resultado}
+
+    @staticmethod
+    def peso_promedio_autor(autor: str):
+        """Calcular peso promedio de libros de un autor.
+
+        Parámetros:
+        - autor: str
+        Retorna: dict con 'autor', 'peso_promedio' y 'libros' o HTTPException 404 si no hay coincidencias.
+        """
+        resultado = LibroService.peso_promedio_por_autor(autor)
+        if resultado is None:
+            raise HTTPException(status_code=404, detail="Autor no encontrado")
+        return {"autor": autor, **resultado}

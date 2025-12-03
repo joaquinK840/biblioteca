@@ -6,7 +6,7 @@ from typing import List, Optional
 from app.models.reserva_model import Reserva
 from app.services.libro_service import LibroService
 from app.services.user_service import UsuarioService
-from app.structures.cola import Cola
+from app.utils.structures.cola import Cola
 
 CSV_PATH = "app/db/data/reservas.csv"
 
@@ -15,6 +15,11 @@ class ReservaService:
 
     @staticmethod
     def _ensure_file_exists():
+        """Crear el archivo CSV de reservas si no existe.
+
+        Parámetros: ninguno.
+        Retorna: None (efecto lateral: crea archivo).
+        """
         if not os.path.exists(CSV_PATH):
             with open(CSV_PATH, mode="w", encoding="utf-8", newline="") as file:
                 writer = csv.writer(file)
@@ -22,6 +27,11 @@ class ReservaService:
 
     @staticmethod
     def cargar_reservas() -> List[Reserva]:
+        """Leer todas las reservas desde CSV y devolver lista de Reserva.
+
+        Parámetros: ninguno.
+        Retorna: List[Reserva].
+        """
         ReservaService._ensure_file_exists()
         reservas: List[Reserva] = []
         with open(CSV_PATH, mode="r", encoding="utf-8") as file:
@@ -39,6 +49,12 @@ class ReservaService:
 
     @staticmethod
     def guardar_reservas(reservas: List[Reserva]):
+        """Guardar la lista completa de reservas en el CSV (sobrescribe).
+
+        Parámetros:
+        - reservas: List[Reserva]
+        Retorna: None (efecto lateral: escribe archivo).
+        """
         with open(CSV_PATH, mode="w", encoding="utf-8", newline="") as file:
             fieldnames = ["reserva_id", "user_id", "isbn", "fecha_reserva"]
             writer = csv.DictWriter(file, fieldnames=fieldnames)
@@ -48,6 +64,12 @@ class ReservaService:
 
     @staticmethod
     def _generar_id(reservas: List[Reserva]) -> str:
+        """Generar un nuevo id secuencial para reservas.
+
+        Parámetros:
+        - reservas: lista actual de Reserva
+        Retorna: nuevo id como str.
+        """
         if not reservas:
             return "1"
         ultimo = max(int(r.reserva_id) for r in reservas)
@@ -57,10 +79,17 @@ class ReservaService:
 
     @staticmethod
     def listar() -> List[Reserva]:
+        """Devolver todas las reservas."""
         return ReservaService.cargar_reservas()
 
     @staticmethod
     def obtener_por_id(reserva_id: str) -> Optional[Reserva]:
+        """Buscar reserva por reserva_id.
+
+        Parámetros:
+        - reserva_id: str
+        Retorna: Reserva o None.
+        """
         for r in ReservaService.cargar_reservas():
             if r.reserva_id == reserva_id:
                 return r
@@ -68,6 +97,14 @@ class ReservaService:
 
     @staticmethod
     def crear(user_id: str, isbn: str) -> Optional[Reserva]:
+        """Crear una nueva reserva solo si el usuario y el libro existen y no hay stock.
+
+        Parámetros:
+        - user_id: str
+        - isbn: str
+        Retorna: Reserva creada o None si la creación no es válida.
+        Efectos: escribe en CSV.
+        """
         # Validar usuario
         if not UsuarioService.obtener_por_id(user_id):
             return None
@@ -97,6 +134,12 @@ class ReservaService:
 
     @staticmethod
     def eliminar(reserva_id: str) -> bool:
+        """Eliminar una reserva por id.
+
+        Parámetros:
+        - reserva_id: str
+        Retorna: True si se eliminó, False si no existe.
+        """
         reservas = ReservaService.cargar_reservas()
         nuevas = [r for r in reservas if r.reserva_id != reserva_id]
         if len(nuevas) == len(reservas):
@@ -108,6 +151,12 @@ class ReservaService:
 
     @staticmethod
     def cola_por_libro(isbn: str) -> Cola:
+        """Construir y devolver una Cola (FIFO) con reservas del libro dado.
+
+        Parámetros:
+        - isbn: str
+        Retorna: Cola con objetos Reserva en orden de llegada.
+        """
         reservas = ReservaService.cargar_reservas()
         cola = Cola()
         reservas_libro = [r for r in reservas if r.isbn == isbn]
@@ -118,13 +167,16 @@ class ReservaService:
 
     @staticmethod
     def asignar_siguiente_reserva(isbn: str):
+        """Asignar la siguiente reserva pendiente al devolver un libro.
+
+        Parámetros:
+        - isbn: str
+        Retorna: Reserva asignada o None si no hay reservas.
+        Efectos:
+        - elimina la reserva del CSV y crea automáticamente un préstamo para ese usuario.
         """
-        Cuando un libro se devuelve, esta función se llama para ver si hay
-        reservas pendientes. Si las hay, se toma la primera en la cola.
-        La creación del nuevo préstamo se podría hacer aquí o en otro nivel.
-        Aquí solo consumimos la reserva y dejamos listo el dato.
-        """
-        from app.services.prestamo_service import PrestamoService  # import local para evitar ciclo
+        from app.services.prestamo_service import \
+            PrestamoService  # import local para evitar ciclo
 
         reservas = ReservaService.cargar_reservas()
         reservas_libro = [r for r in reservas if r.isbn == isbn]
