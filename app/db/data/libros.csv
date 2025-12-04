@@ -1,1 +1,22 @@
 isbn,titulo,autor,peso,valor,stock,paginas,editorial,idioma
+99789588886316,Cien años de soledad,Gabriel García Márquez,2.5,55000,5,496,Sudamericana,Español,0
+9788497592208,Don Quijote de la Mancha,Miguel de Cervantes,2.5,60000,3,863,Alfaguara,Español,0
+9788437624828,La casa de los espíritus,Isabel Allende,2.0,48000,4,448,Plaza & Janés,Español,0
+9780307474728,The Great Gatsby,F. Scott Fitzgerald,2.2,42000,2,180,Scribner,Inglés,0
+9780451524935,1984,George Orwell,0.75,39000,6,328,Signet Classics,Inglés,0
+9780140449266,The Odyssey,Homer,0.9,45000,2,560,Penguin Classics,Inglés,0
+9780061120084,To Kill a Mockingbird,Harper Lee,0.82,41000,4,336,Harper Perennial,Inglés,0
+9789500756825,Rayuela,Julio Cortázar,1.0,53000,5,736,Alfaguara,Español,0
+9780140449181,The Iliad,Homer,0.88,44000,3,704,Penguin Classics,Inglés,0
+9788420471839,Fahrenheit 451,Ray Bradbury,0.72,37000,7,240,Minotauro,Español,0
+9780307949486,Brave New World,Aldous Huxley,0.76,41000,3,288,Harper Perennial,Inglés,0
+9788420412146,El amor en los tiempos del cólera,Gabriel García Márquez,1.05,52000,5,480,Diana,Español,0
+9789504914849,El túnel,Ernesto Sábato,0.5,28000,6,160,Seix Barral,Español,0
+9788437604943,Crónica de una muerte anunciada,Gabriel García Márquez,0.62,32000,5,128,Sudamericana,Español,0
+9788497930192,Ensayo sobre la ceguera,José Saramago,0.95,46000,3,352,Alfaguara,Español,0
+9788466332126,El principito,Antoine de Saint-Exupéry,0.35,25000,10,96,Salamandra,Español,0
+2222222222222,Moby-Dick,Herman Melville,1.2,48000,2,720,Penguin Classics,Inglés,0
+1111111111114,Los pilares de la tierra,Ken Follett,1.35,65000,4,1040,Plaza & Janés,Español,0
+1111111111112,Del amor y otros demonios,Gabriel García Márquez,0.7,30000,5,192,Sudamericana,Español,0
+1111111111113,La hojarasca,Gabriel García Márquez,0.62,31000,4,176,Sudamericana,Español,0
+1111111111111,Nuevo libro,Autor X,0.5,20000,0,150,Editorial X,Español,0
