@@ -175,8 +175,9 @@ class ReservaService:
         Efectos:
         - elimina la reserva del CSV y crea automáticamente un préstamo para ese usuario.
         """
-        from app.services.prestamo_service import \
-            PrestamoService  # import local para evitar ciclo
+        # Nota: import local intencional para evitar dependencia circular
+        # entre ReservaService y PrestamoService.
+        from app.services.prestamo_service import PrestamoService
 
         reservas = ReservaService.cargar_reservas()
         reservas_libro = [r for r in reservas if r.isbn == isbn]

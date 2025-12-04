@@ -10,6 +10,7 @@ from app.services.reserva_service import \
     ReservaService  # para procesar reservas
 from app.services.user_service import UsuarioService
 from app.utils.structures.pila import Pila
+from app.utils.libros.inventario import Inventario
 
 CSV_PATH = "app/db/data/prestamos.csv"
 
@@ -199,8 +200,30 @@ class PrestamoService:
 
         PrestamoService.guardar_prestamos(prestamos)
 
-        # Verificar reservas pendientes (cola) y asignar si hay
-        ReservaService.asignar_siguiente_reserva(prestamo_encontrado.isbn)
+        # =====================
+        # Integración búsqueda binaria (Inventario ordenado por ISBN)
+        # =====================
+        try:
+            inventario = Inventario()
+            # cargar todos los libros y mantener lista ordenada por inserción
+            libros_actuales = LibroService.cargar_libros()
+            for l in libros_actuales:
+                inventario.agregar_libro(l)
+
+            # buscar por ISBN en inventario ordenado
+            libro_en_inventario = inventario.buscar_binaria(prestamo_encontrado.isbn)
+
+            # si se encuentra, procedemos a verificar/atender reservas FIFO
+            if libro_en_inventario is not None:
+                ReservaService.asignar_siguiente_reserva(prestamo_encontrado.isbn)
+            else:
+                # si no se encuentra, no asignamos reserva (consistencia del inventario)
+                # En un escenario real, se podría loguear/alertar; aquí mantenemos silencioso
+                pass
+        except Exception:
+            # en caso de cualquier error en la fase de verificación binaria,
+            # mantenemos el flujo original para no bloquear la devolución
+            ReservaService.asignar_siguiente_reserva(prestamo_encontrado.isbn)
 
         return prestamo_encontrado
 
