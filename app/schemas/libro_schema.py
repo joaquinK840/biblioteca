@@ -9,7 +9,7 @@ class LibroBase(BaseModel):
     paginas: int
     editorial: str
     idioma: str
-    estanteria: int
+    
 
 class LibroCreate(LibroBase):
     isbn: str
