@@ -152,3 +152,16 @@ class LibroController:
         if resultado is None:
             raise HTTPException(status_code=404, detail="Autor no encontrado")
         return {"autor": autor, **resultado}
+
+    @staticmethod
+    def buscar_lineal(texto: str):
+        """Búsqueda lineal por título o autor en inventario general.
+
+        Parámetros:
+        - texto: str (consulta)
+        Retorna: List[Libro] o HTTPException 404 si no hay coincidencias.
+        """
+        resultados = LibroService.buscar_lineal(texto)
+        if not resultados:
+            raise HTTPException(status_code=404, detail="Sin coincidencias para la búsqueda")
+        return resultados

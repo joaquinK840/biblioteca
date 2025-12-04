@@ -11,6 +11,7 @@ from app.utils.libros.librosOrdenados import libros_ordenados_isbn
 from app.utils.libros.libroSort import ordenar_libros_por_precio
 from app.utils.libros.recursion_cola import peso_promedio_tail_con_libros
 from app.utils.libros.recursion_pila import valor_total_recursivo_con_libros
+from app.utils.libros.inventario import Inventario
 
 CSV_PATH = "app/db/data/libros.csv"
 
@@ -129,6 +130,24 @@ class LibroService:
         libros= LibroService.cargar_libros()
         ordenados=ordenar_libros_por_precio(libros)
         return ordenados
+
+    @staticmethod
+    def buscar_lineal(texto: str) -> List[Libro]:
+        """Buscar por título o autor sobre el inventario general (lista desordenada).
+
+        Parámetros:
+        - texto: str a buscar (case-insensitive) en título o autor.
+        Retorna:
+        - List[Libro] con coincidencias.
+        """
+        # Cargar inventario y realizar búsqueda lineal
+        
+
+        inventario = Inventario()
+        libros = LibroService.cargar_libros()
+        for l in libros:
+            inventario.agregar_libro(l)
+        return inventario.buscar_lineal(texto)
     
     @staticmethod
     def estanteria_deficiente():

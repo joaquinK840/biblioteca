@@ -32,7 +32,7 @@ class Inventario:
     def _insertar_ordenado_isbn(self, libro: Libro):
         i = 0
         while i < len(self.inventario_ordenado) and \
-              self.inventario_ordenado[i].isbn < libro.isbn:
+            self.inventario_ordenado[i].isbn < libro.isbn:
             i += 1
         self.inventario_ordenado.insert(i, libro)
 

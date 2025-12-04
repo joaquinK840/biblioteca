@@ -51,3 +51,13 @@ def valor_total(autor: str):
 @router.get("/autor/{autor}/peso-promedio")
 def peso_promedio(autor: str):
     return LibroController.peso_promedio_autor(autor)
+
+@router.get("/buscar")
+def buscar_lineal(q: str):
+    """Buscar libros por título o autor usando búsqueda lineal sobre el inventario general.
+
+    Parámetros:
+    - q: cadena de consulta.
+    Retorna: lista de libros coincidentes.
+    """
+    return LibroController.buscar_lineal(q)
