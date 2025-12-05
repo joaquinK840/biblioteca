@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reservas</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="/static/js/main.js"></script>
+</head>
+<body>
+
+<header><h1>Reservas</h1></header>
+<nav><a href="/">Inicio</a></nav>
+
+<div class="container">
+
+    <h2>Lista de Reservas</h2>
+    <button onclick="cargarReservas()">Cargar Reservas</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th><th>Usuario</th><th>ISBN</th><th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-reservas"></tbody>
+    </table>
+
+    <h3>Crear Reserva</h3>
+    <input id="r_uid" placeholder="Usuario ID">
+    <input id="r_isbn" placeholder="ISBN">
+    <button onclick="crearReserva()">Crear</button>
+
+    <h3>Ver Cola FIFO</h3>
+    <input id="cola_isbn" placeholder="ISBN">
+    <button onclick="verCola()">Ver Cola</button>
+
+    <table>
+        <thead><tr><th>ID</th><th>Usuario</th><th>ISBN</th><th>Fecha</th></tr></thead>
+        <tbody id="tabla-cola"></tbody>
+    </table>
+
+</div>
+
+<script>
+async function cargarReservas() {
+    const datos = await fetchAPI("/reservas/");
+    renderTable("tabla-reservas", datos);
+}
+
+async function crearReserva() {
+    const data = {
+        user_id: document.getElementById("r_uid").value,
+        isbn: document.getElementById("r_isbn").value
+    };
+
+    await fetchAPI("/reservas/", "POST", data);
+    alert("Reserva creada");
+    cargarReservas();
+}
+
+async function verCola() {
+    const isbn = document.getElementById("cola_isbn").value;
+    const datos = await fetchAPI(`/reservas/cola/${isbn}`);
+
+    renderTable("tabla-cola", datos);
+}
+</script>
+
+</body>
+</html>

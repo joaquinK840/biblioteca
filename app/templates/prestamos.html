@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Préstamos</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="/static/js/main.js"></script>
+</head>
+<body>
+
+<header><h1>Préstamos</h1></header>
+<nav><a href="/">Inicio</a></nav>
+
+<div class="container">
+
+    <h2>Lista de Préstamos</h2>
+    <button onclick="cargarPrestamos()">Cargar Préstamos</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th><th>Usuario</th><th>ISBN</th><th>Fecha Prestamo</th><th>Devolución</th><th>Devuelto</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-prestamos"></tbody>
+    </table>
+
+    <h3>Crear Préstamo</h3>
+    <input id="p_uid" placeholder="Usuario ID">
+    <input id="p_isbn" placeholder="ISBN">
+    <button onclick="crearPrestamo()">Crear</button>
+
+    <h3>Registrar Devolución</h3>
+    <input id="devol_prestamo" placeholder="ID Préstamo">
+    <button onclick="registrarDevolucion()">Devolver</button>
+
+    <h3>Historial del Usuario</h3>
+    <input id="hist_uid" placeholder="Usuario ID">
+    <button onclick="verHistorial()">Ver</button>
+
+    <table>
+        <thead>
+            <tr><th>Préstamo</th><th>Usuario</th><th>ISBN</th></tr>
+        </thead>
+        <tbody id="tabla-historial"></tbody>
+    </table>
+
+</div>
+
+<script>
+async function cargarPrestamos() {
+    const datos = await fetchAPI("/prestamos/");
+    renderTable("tabla-prestamos", datos);
+}
+
+async function crearPrestamo() {
+    const data = {
+        user_id: document.getElementById("p_uid").value,
+        isbn: document.getElementById("p_isbn").value
+    };
+
+    await fetchAPI("/prestamos/", "POST", data);
+    alert("Préstamo creado");
+    cargarPrestamos();
+}
+
+async function registrarDevolucion() {
+    const id = document.getElementById("devol_prestamo").value;
+    await fetchAPI(`/prestamos/devolver/${id}`, "PUT");
+    alert("Devolución registrada");
+    cargarPrestamos();
+}
+
+async function verHistorial() {
+    const uid = document.getElementById("hist_uid").value;
+    const datos = await fetchAPI(`/prestamos/historial/${uid}`);
+
+    const tabla = document.getElementById("tabla-historial");
+    tabla.innerHTML = "";
+
+    datos.forEach(p => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${p.prestamo_id}</td><td>${p.user_id}</td><td>${p.isbn}</td>`;
+        tabla.appendChild(tr);
+    });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Libros</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="/static/js/main.js"></script>
+</head>
+<body>
+
+<header><h1>Libros</h1></header>
+<nav><a href="/">Inicio</a></nav>
+
+<div class="container">
+
+    <h2>Lista de Libros</h2>
+    <button onclick="cargarLibros()">Cargar Libros</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ISBN</th><th>Título</th><th>Autor</th><th>Peso</th><th>Valor</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-libros"></tbody>
+    </table>
+
+    <h3>Agregar Libro</h3>
+    <input id="isbn" placeholder="ISBN">
+    <input id="titulo" placeholder="Título">
+    <input id="autor" placeholder="Autor">
+    <input id="peso" placeholder="Peso">
+    <input id="valor" placeholder="Valor">
+    <button onclick="crearLibro()">Crear</button>
+
+</div>
+
+<script>
+async function cargarLibros() {
+    const datos = await fetchAPI("/libros/");
+    renderTable("tabla-libros", datos);
+}
+
+async function crearLibro() {
+    const data = {
+        isbn: document.getElementById("isbn").value,
+        titulo: document.getElementById("titulo").value,
+        autor: document.getElementById("autor").value,
+        peso: parseFloat(document.getElementById("peso").value),
+        valor: parseInt(document.getElementById("valor").value),
+        stock: 1,
+        paginas: 100,
+        editorial: "N/A",
+        idioma: "ES",
+        estanteria: 0
+    };
+
+    await fetchAPI("/libros/", "POST", data);
+    alert("Libro creado");
+    cargarLibros();
+}
+</script>
+
+</body>
+</html>

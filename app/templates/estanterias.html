@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Estanterías</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="/static/js/main.js"></script>
+</head>
+<body>
+
+<header><h1>Estanterías</h1></header>
+<nav><a href="/">Inicio</a></nav>
+
+<div class="container">
+
+    <h2>Fuerza Bruta – Combinaciones Peligrosas</h2>
+    <button onclick="fuerzaBruta()">Ejecutar</button>
+
+    <table>
+        <thead>
+            <tr><th>Libros</th><th>Peso Total</th></tr>
+        </thead>
+        <tbody id="tabla-fb"></tbody>
+    </table>
+
+    <h2>Backtracking – Estantería Óptima</h2>
+    <button onclick="backtracking()">Ejecutar</button>
+
+    <table>
+        <thead>
+            <tr><th>Estantería</th><th>Libros</th><th>Peso</th><th>Precio</th></tr>
+        </thead>
+        <tbody id="tabla-bt"></tbody>
+    </table>
+
+</div>
+
+<script>
+async function fuerzaBruta() {
+    const datos = await fetchAPI("/estanteria/deficiente");
+    const tabla = document.getElementById("tabla-fb");
+    tabla.innerHTML = "";
+
+    datos.combinaciones?.forEach(c => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${c.libros.join(" , ")}</td><td>${c.peso_total}</td>`;
+        tabla.appendChild(tr);
+    });
+}
+
+async function backtracking() {
+    const datos = await fetchAPI("/estanteria/optima");
+    const tabla = document.getElementById("tabla-bt");
+    tabla.innerHTML = "";
+
+    datos.resultado?.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${r.estanteria}</td>
+            <td>${r.libros.join(", ")}</td>
+            <td>${r.peso_total}</td>
+            <td>${r.precio_total}</td>`;
+        tabla.appendChild(tr);
+    });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Usuarios</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="/static/js/main.js"></script>
+</head>
+<body>
+
+<header><h1>Usuarios</h1></header>
+<nav><a href="/">Inicio</a></nav>
+
+<div class="container">
+
+    <h2>Lista de Usuarios</h2>
+    <button onclick="cargarUsuarios()">Cargar Usuarios</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th><th>Nombre</th><th>Email</th><th>Teléfono</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-usuarios"></tbody>
+    </table>
+
+    <h3>Crear Usuario</h3>
+    <input id="uid" placeholder="ID">
+    <input id="nombre" placeholder="Nombre">
+    <input id="correo" placeholder="Correo">
+    <input id="telefono" placeholder="Teléfono">
+    <button onclick="crearUsuario()">Crear</button>
+
+</div>
+
+<script>
+async function cargarUsuarios() {
+    const datos = await fetchAPI("/usuarios/");
+    renderTable("tabla-usuarios", datos);
+}
+
+async function crearUsuario() {
+    const data = {
+        user_id: document.getElementById("uid").value,
+        nombre: document.getElementById("nombre").value,
+        correo: document.getElementById("correo").value,
+        telefono: document.getElementById("telefono").value
+    };
+
+    await fetchAPI("/usuarios/", "POST", data);
+    alert("Usuario creado");
+    cargarUsuarios();
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #333;
+    color: white;
+    padding: 12px;
+    text-align: center;
+}
+
+nav {
+    background: #444;
+    padding: 10px;
+}
+nav a {
+    color: white;
+    margin-right: 12px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.container {
+    padding: 20px;
+}
+
+button {
+    background: #333;
+    color: white;
+    padding: 7px 14px;
+    border: none;
+    margin: 5px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+table th, table td {
+    border: 1px solid #aaa;
+    padding: 8px;
+}
