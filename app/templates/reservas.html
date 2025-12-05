@@ -1,69 +1,246 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Reservas</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+<html lang="es">
+  <head>
+    <!-- ============================================
+         BIBLIOTECA - Gestión de Reservas
+         Cola FIFO para libros sin stock
+         ============================================ -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reservas - Biblioteca</title>
+    <link rel="stylesheet" href="/static/css/styles.css" />
     <script src="/static/js/main.js"></script>
-</head>
-<body>
+  </head>
+  <body>
+    <!-- ========== HEADER ========== -->
+    <header>
+      <h1>🔖 Gestión de Reservas</h1>
+      <p>Cola de espera FIFO para libros sin stock</p>
+    </header>
 
-<header><h1>Reservas</h1></header>
-<nav><a href="/">Inicio</a></nav>
+    <!-- ========== NAVEGACIÓN ========== -->
+    <nav>
+      <a href="/">🏠 Inicio</a>
+      <a href="/templates/libros">📖 Libros</a>
+      <a href="/templates/usuarios">👤 Usuarios</a>
+      <a href="/templates/prestamos">📋 Préstamos</a>
+      <a href="/templates/reservas" class="active">🔖 Reservas</a>
+      <a href="/templates/estanterias">📚 Estanterías</a>
+    </nav>
 
-<div class="container">
+    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <div class="container">
+      <!-- ===== SECCIÓN: Lista de Reservas ===== -->
+      <div class="section fade-in">
+        <h2>📋 Lista de Reservas</h2>
+        <p>
+          Las reservas solo se pueden crear cuando el libro tiene stock = 0.
+        </p>
 
-    <h2>Lista de Reservas</h2>
-    <button onclick="cargarReservas()">Cargar Reservas</button>
+        <div class="form-group">
+          <button onclick="cargarReservas()">🔄 Cargar Reservas</button>
+        </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th><th>Usuario</th><th>ISBN</th><th>Fecha</th>
-            </tr>
-        </thead>
-        <tbody id="tabla-reservas"></tbody>
-    </table>
+        <!-- Tabla de reservas -->
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID Reserva</th>
+                <th>Usuario</th>
+                <th>ISBN</th>
+                <th>Fecha Reserva</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-reservas">
+              <!-- Los datos se cargan dinámicamente -->
+            </tbody>
+          </table>
+        </div>
 
-    <h3>Crear Reserva</h3>
-    <input id="r_uid" placeholder="Usuario ID">
-    <input id="r_isbn" placeholder="ISBN">
-    <button onclick="crearReserva()">Crear</button>
+        <div id="loading-reservas" class="loading">Cargando...</div>
+      </div>
 
-    <h3>Ver Cola FIFO</h3>
-    <input id="cola_isbn" placeholder="ISBN">
-    <button onclick="verCola()">Ver Cola</button>
+      <!-- ===== SECCIÓN: Crear Reserva ===== -->
+      <div class="section fade-in">
+        <h2>➕ Crear Nueva Reserva</h2>
+        <p>
+          Solo se permite reservar si el libro NO tiene stock disponible (stock
+          = 0).
+        </p>
 
-    <table>
-        <thead><tr><th>ID</th><th>Usuario</th><th>ISBN</th><th>Fecha</th></tr></thead>
-        <tbody id="tabla-cola"></tbody>
-    </table>
+        <div class="form-group">
+          <input type="text" id="r_uid" placeholder="ID del Usuario" />
+          <input type="text" id="r_isbn" placeholder="ISBN del Libro" />
+          <button onclick="crearReserva()" class="btn-success">
+            ✅ Crear Reserva
+          </button>
+        </div>
+      </div>
 
-</div>
+      <!-- ===== SECCIÓN: Cola FIFO por Libro ===== -->
+      <div class="section fade-in">
+        <h2>📚 Cola de Espera FIFO</h2>
+        <p>
+          Visualiza la cola de reservas para un libro específico. El primero en
+          la lista será el próximo en recibir el libro cuando se devuelva.
+        </p>
 
-<script>
-async function cargarReservas() {
-    const datos = await fetchAPI("/reservas/");
-    renderTable("tabla-reservas", datos);
-}
+        <div class="form-group">
+          <input type="text" id="cola_isbn" placeholder="ISBN del Libro" />
+          <button onclick="verCola()">🔍 Ver Cola</button>
+        </div>
 
-async function crearReserva() {
-    const data = {
-        user_id: document.getElementById("r_uid").value,
-        isbn: document.getElementById("r_isbn").value
-    };
+        <!-- Tabla de cola FIFO -->
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Posición</th>
+                <th>ID Reserva</th>
+                <th>Usuario</th>
+                <th>Fecha Reserva</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-cola">
+              <!-- Los datos se cargan dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-    await fetchAPI("/reservas/", "POST", data);
-    alert("Reserva creada");
-    cargarReservas();
-}
+    <!-- ========== FOOTER ========== -->
+    <footer>
+      <p>Sistema de Gestión de Biblioteca © 2025</p>
+    </footer>
 
-async function verCola() {
-    const isbn = document.getElementById("cola_isbn").value;
-    const datos = await fetchAPI(`/reservas/cola/${isbn}`);
+    <!-- ========== SCRIPTS ========== -->
+    <script>
+      // URL base de la API
+      const API_BASE = "http://127.0.0.1:8000";
 
-    renderTable("tabla-cola", datos);
-}
-</script>
+      /**
+       * Cargar todas las reservas desde la API
+       * Usa: GET /reservas/
+       */
+      async function cargarReservas() {
+        mostrarLoading("loading-reservas", true);
+        try {
+          const datos = await fetchAPI(`${API_BASE}/reservas/`);
+          renderTablaReservas(datos);
+        } catch (error) {
+          mostrarError("Error al cargar reservas");
+        }
+        mostrarLoading("loading-reservas", false);
+      }
 
-</body>
+      /**
+       * Crear una nueva reserva
+       * Usa: POST /reservas/
+       * Requisito: El libro debe tener stock = 0
+       */
+      async function crearReserva() {
+        const data = {
+          user_id: document.getElementById("r_uid").value.trim(),
+          isbn: document.getElementById("r_isbn").value.trim(),
+        };
+
+        if (!data.user_id || !data.isbn) {
+          mostrarError("Usuario e ISBN son obligatorios");
+          return;
+        }
+
+        try {
+          await fetchAPI(`${API_BASE}/reservas/`, "POST", data);
+          mostrarExito("Reserva creada exitosamente");
+          document.getElementById("r_uid").value = "";
+          document.getElementById("r_isbn").value = "";
+          cargarReservas();
+        } catch (error) {
+          mostrarError("Error al crear reserva (¿el libro aún tiene stock?)");
+        }
+      }
+
+      /**
+       * Ver cola FIFO de reservas para un libro específico
+       * Usa: GET /reservas/cola/{isbn}
+       */
+      async function verCola() {
+        const isbn = document.getElementById("cola_isbn").value.trim();
+
+        if (!isbn) {
+          mostrarError("Ingresa el ISBN del libro");
+          return;
+        }
+
+        try {
+          const datos = await fetchAPI(`${API_BASE}/reservas/cola/${isbn}`);
+          renderTablaCola(datos);
+          mostrarExito(`Cola cargada: ${datos.length} reserva(s) en espera`);
+        } catch (error) {
+          renderTablaCola([]);
+          mostrarError("Error al cargar la cola");
+        }
+      }
+
+      // ========== FUNCIONES AUXILIARES ==========
+
+      /**
+       * Renderiza la tabla de reservas
+       */
+      function renderTablaReservas(reservas) {
+        const tabla = document.getElementById("tabla-reservas");
+        tabla.innerHTML = "";
+
+        reservas.forEach((r) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+                    <td>${r.reserva_id}</td>
+                    <td>${r.user_id}</td>
+                    <td>${r.isbn}</td>
+                    <td>${r.fecha_reserva}</td>
+                `;
+          tabla.appendChild(tr);
+        });
+      }
+
+      /**
+       * Renderiza la tabla de cola FIFO con posiciones
+       */
+      function renderTablaCola(cola) {
+        const tabla = document.getElementById("tabla-cola");
+        tabla.innerHTML = "";
+
+        cola.forEach((r, index) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+                    <td><span class="badge ${
+                      index === 0 ? "badge-success" : "badge-warning"
+                    }">${index + 1}°</span></td>
+                    <td>${r.reserva_id}</td>
+                    <td>${r.user_id}</td>
+                    <td>${r.fecha_reserva}</td>
+                `;
+          tabla.appendChild(tr);
+        });
+      }
+
+      function mostrarLoading(id, show) {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle("active", show);
+      }
+
+      function mostrarExito(msg) {
+        alert("✅ " + msg);
+      }
+
+      function mostrarError(msg) {
+        alert("❌ " + msg);
+      }
+
+      // Cargar reservas al iniciar
+      document.addEventListener("DOMContentLoaded", cargarReservas);
+    </script>
+  </body>
 </html>

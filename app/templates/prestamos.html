@@ -1,89 +1,301 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Préstamos</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+<html lang="es">
+  <head>
+    <!-- ============================================
+         BIBLIOTECA - Gestión de Préstamos
+         Préstamos, devoluciones e historial (Pila)
+         ============================================ -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Préstamos - Biblioteca</title>
+    <link rel="stylesheet" href="/static/css/styles.css" />
     <script src="/static/js/main.js"></script>
-</head>
-<body>
+  </head>
+  <body>
+    <!-- ========== HEADER ========== -->
+    <header>
+      <h1>📋 Gestión de Préstamos</h1>
+      <p>Préstamos, devoluciones e historial LIFO</p>
+    </header>
 
-<header><h1>Préstamos</h1></header>
-<nav><a href="/">Inicio</a></nav>
+    <!-- ========== NAVEGACIÓN ========== -->
+    <nav>
+      <a href="/">🏠 Inicio</a>
+      <a href="/templates/libros">📖 Libros</a>
+      <a href="/templates/usuarios">👤 Usuarios</a>
+      <a href="/templates/prestamos" class="active">📋 Préstamos</a>
+      <a href="/templates/reservas">🔖 Reservas</a>
+      <a href="/templates/estanterias">📚 Estanterías</a>
+    </nav>
 
-<div class="container">
+    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <div class="container">
+      <!-- ===== SECCIÓN: Lista de Préstamos ===== -->
+      <div class="section fade-in">
+        <h2>📋 Lista de Préstamos Activos</h2>
 
-    <h2>Lista de Préstamos</h2>
-    <button onclick="cargarPrestamos()">Cargar Préstamos</button>
+        <div class="form-group">
+          <button onclick="cargarPrestamos()">🔄 Cargar Préstamos</button>
+        </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th><th>Usuario</th><th>ISBN</th><th>Fecha Prestamo</th><th>Devolución</th><th>Devuelto</th>
-            </tr>
-        </thead>
-        <tbody id="tabla-prestamos"></tbody>
-    </table>
+        <!-- Tabla de préstamos -->
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>ISBN</th>
+                <th>Fecha Préstamo</th>
+                <th>Fecha Devolución</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-prestamos">
+              <!-- Los datos se cargan dinámicamente -->
+            </tbody>
+          </table>
+        </div>
 
-    <h3>Crear Préstamo</h3>
-    <input id="p_uid" placeholder="Usuario ID">
-    <input id="p_isbn" placeholder="ISBN">
-    <button onclick="crearPrestamo()">Crear</button>
+        <div id="loading-prestamos" class="loading">Cargando...</div>
+      </div>
 
-    <h3>Registrar Devolución</h3>
-    <input id="devol_prestamo" placeholder="ID Préstamo">
-    <button onclick="registrarDevolucion()">Devolver</button>
+      <!-- ===== SECCIÓN: Crear Préstamo ===== -->
+      <div class="section fade-in">
+        <h2>➕ Crear Nuevo Préstamo</h2>
+        <p>
+          Al crear un préstamo, se descuenta automáticamente el stock del libro.
+        </p>
 
-    <h3>Historial del Usuario</h3>
-    <input id="hist_uid" placeholder="Usuario ID">
-    <button onclick="verHistorial()">Ver</button>
+        <div class="form-group">
+          <input type="text" id="p_uid" placeholder="ID del Usuario" />
+          <input type="text" id="p_isbn" placeholder="ISBN del Libro" />
+          <button onclick="crearPrestamo()" class="btn-success">
+            ✅ Crear Préstamo
+          </button>
+        </div>
+      </div>
 
-    <table>
-        <thead>
-            <tr><th>Préstamo</th><th>Usuario</th><th>ISBN</th></tr>
-        </thead>
-        <tbody id="tabla-historial"></tbody>
-    </table>
+      <!-- ===== SECCIÓN: Registrar Devolución ===== -->
+      <div class="section fade-in">
+        <h2>↩️ Registrar Devolución</h2>
+        <p>
+          Al devolver, se incrementa el stock y se verifica si hay reservas
+          pendientes (búsqueda binaria + cola FIFO).
+        </p>
 
-</div>
+        <div class="form-group">
+          <input
+            type="text"
+            id="devol_prestamo"
+            placeholder="ID del Préstamo"
+          />
+          <button onclick="registrarDevolucion()" class="btn-warning">
+            📥 Registrar Devolución
+          </button>
+        </div>
+      </div>
 
-<script>
-async function cargarPrestamos() {
-    const datos = await fetchAPI("/prestamos/");
-    renderTable("tabla-prestamos", datos);
-}
+      <!-- ===== SECCIÓN: Historial de Usuario (Pila LIFO) ===== -->
+      <div class="section fade-in">
+        <h2>📚 Historial del Usuario (Pila LIFO)</h2>
+        <p>
+          El historial usa una estructura de Pila: el último préstamo aparece
+          primero.
+        </p>
 
-async function crearPrestamo() {
-    const data = {
-        user_id: document.getElementById("p_uid").value,
-        isbn: document.getElementById("p_isbn").value
-    };
+        <div class="form-group">
+          <input type="text" id="hist_uid" placeholder="ID del Usuario" />
+          <button onclick="verHistorial()">🔍 Ver Historial</button>
+        </div>
 
-    await fetchAPI("/prestamos/", "POST", data);
-    alert("Préstamo creado");
-    cargarPrestamos();
-}
+        <!-- Tabla de historial -->
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID Préstamo</th>
+                <th>Usuario</th>
+                <th>ISBN</th>
+                <th>Fecha Préstamo</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-historial">
+              <!-- Los datos se cargan dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-async function registrarDevolucion() {
-    const id = document.getElementById("devol_prestamo").value;
-    await fetchAPI(`/prestamos/devolver/${id}`, "PUT");
-    alert("Devolución registrada");
-    cargarPrestamos();
-}
+    <!-- ========== FOOTER ========== -->
+    <footer>
+      <p>Sistema de Gestión de Biblioteca © 2025</p>
+    </footer>
 
-async function verHistorial() {
-    const uid = document.getElementById("hist_uid").value;
-    const datos = await fetchAPI(`/prestamos/historial/${uid}`);
+    <!-- ========== SCRIPTS ========== -->
+    <script>
+      // URL base de la API
+      const API_BASE = "http://127.0.0.1:8000";
 
-    const tabla = document.getElementById("tabla-historial");
-    tabla.innerHTML = "";
+      /**
+       * Cargar todos los préstamos desde la API
+       * Usa: GET /prestamos/
+       */
+      async function cargarPrestamos() {
+        mostrarLoading("loading-prestamos", true);
+        try {
+          const datos = await fetchAPI(`${API_BASE}/prestamos/`);
+          renderTablaPrestamos(datos);
+        } catch (error) {
+          mostrarError("Error al cargar préstamos");
+        }
+        mostrarLoading("loading-prestamos", false);
+      }
 
-    datos.forEach(p => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${p.prestamo_id}</td><td>${p.user_id}</td><td>${p.isbn}</td>`;
-        tabla.appendChild(tr);
-    });
-}
-</script>
+      /**
+       * Crear un nuevo préstamo
+       * Usa: POST /prestamos/
+       * Requiere: usuario válido, libro con stock > 0
+       */
+      async function crearPrestamo() {
+        const data = {
+          user_id: document.getElementById("p_uid").value.trim(),
+          isbn: document.getElementById("p_isbn").value.trim(),
+        };
 
-</body>
+        if (!data.user_id || !data.isbn) {
+          mostrarError("Usuario e ISBN son obligatorios");
+          return;
+        }
+
+        try {
+          await fetchAPI(`${API_BASE}/prestamos/`, "POST", data);
+          mostrarExito("Préstamo creado exitosamente");
+          document.getElementById("p_uid").value = "";
+          document.getElementById("p_isbn").value = "";
+          cargarPrestamos();
+        } catch (error) {
+          mostrarError(
+            "Error al crear préstamo (¿usuario/libro inválido o sin stock?)"
+          );
+        }
+      }
+
+      /**
+       * Registrar devolución de un préstamo
+       * Usa: PUT /prestamos/devolver/{id}
+       * Activa: búsqueda binaria + asignación de reservas
+       */
+      async function registrarDevolucion() {
+        const id = document.getElementById("devol_prestamo").value.trim();
+
+        if (!id) {
+          mostrarError("Ingresa el ID del préstamo");
+          return;
+        }
+
+        try {
+          await fetchAPI(`${API_BASE}/prestamos/devolver/${id}`, "PUT");
+          mostrarExito(
+            "Devolución registrada. Si había reservas, se asignó automáticamente."
+          );
+          document.getElementById("devol_prestamo").value = "";
+          cargarPrestamos();
+        } catch (error) {
+          mostrarError("Error al registrar devolución");
+        }
+      }
+
+      /**
+       * Ver historial de préstamos de un usuario (Pila LIFO)
+       * Usa: GET /prestamos/historial/{user_id}
+       */
+      async function verHistorial() {
+        const uid = document.getElementById("hist_uid").value.trim();
+
+        if (!uid) {
+          mostrarError("Ingresa el ID del usuario");
+          return;
+        }
+
+        try {
+          const datos = await fetchAPI(
+            `${API_BASE}/prestamos/historial/${uid}`
+          );
+          renderTablaHistorial(datos);
+          mostrarExito(`Historial cargado: ${datos.length} préstamo(s)`);
+        } catch (error) {
+          renderTablaHistorial([]);
+          mostrarError("Error al cargar historial");
+        }
+      }
+
+      // ========== FUNCIONES AUXILIARES ==========
+
+      /**
+       * Renderiza la tabla de préstamos
+       */
+      function renderTablaPrestamos(prestamos) {
+        const tabla = document.getElementById("tabla-prestamos");
+        tabla.innerHTML = "";
+
+        prestamos.forEach((p) => {
+          const tr = document.createElement("tr");
+          const devuelto = p.devuelto === "1" || p.devuelto === true;
+          tr.innerHTML = `
+                    <td>${p.prestamo_id}</td>
+                    <td>${p.user_id}</td>
+                    <td>${p.isbn}</td>
+                    <td>${p.fecha_prestamo}</td>
+                    <td>${p.fecha_devolucion || "-"}</td>
+                    <td><span class="badge ${
+                      devuelto ? "badge-success" : "badge-warning"
+                    }">${devuelto ? "Devuelto" : "Activo"}</span></td>
+                `;
+          tabla.appendChild(tr);
+        });
+      }
+
+      /**
+       * Renderiza la tabla de historial (Pila)
+       */
+      function renderTablaHistorial(historial) {
+        const tabla = document.getElementById("tabla-historial");
+        tabla.innerHTML = "";
+
+        historial.forEach((p) => {
+          const tr = document.createElement("tr");
+          const devuelto = p.devuelto === "1" || p.devuelto === true;
+          tr.innerHTML = `
+                    <td>${p.prestamo_id}</td>
+                    <td>${p.user_id}</td>
+                    <td>${p.isbn}</td>
+                    <td>${p.fecha_prestamo}</td>
+                    <td><span class="badge ${
+                      devuelto ? "badge-success" : "badge-warning"
+                    }">${devuelto ? "Devuelto" : "Activo"}</span></td>
+                `;
+          tabla.appendChild(tr);
+        });
+      }
+
+      function mostrarLoading(id, show) {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle("active", show);
+      }
+
+      function mostrarExito(msg) {
+        alert("✅ " + msg);
+      }
+
+      function mostrarError(msg) {
+        alert("❌ " + msg);
+      }
+
+      // Cargar préstamos al iniciar
+      document.addEventListener("DOMContentLoaded", cargarPrestamos);
+    </script>
+  </body>
 </html>

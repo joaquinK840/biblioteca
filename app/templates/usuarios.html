@@ -1,57 +1,179 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Usuarios</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+<html lang="es">
+  <head>
+    <!-- ============================================
+         BIBLIOTECA - Gestión de Usuarios
+         CRUD completo de usuarios
+         ============================================ -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Usuarios - Biblioteca</title>
+    <link rel="stylesheet" href="/static/css/styles.css" />
     <script src="/static/js/main.js"></script>
-</head>
-<body>
+  </head>
+  <body>
+    <!-- ========== HEADER ========== -->
+    <header>
+      <h1>👤 Gestión de Usuarios</h1>
+      <p>Administración de usuarios del sistema</p>
+    </header>
 
-<header><h1>Usuarios</h1></header>
-<nav><a href="/">Inicio</a></nav>
+    <!-- ========== NAVEGACIÓN ========== -->
+    <nav>
+      <a href="/">🏠 Inicio</a>
+      <a href="/templates/libros">📖 Libros</a>
+      <a href="/templates/usuarios" class="active">👤 Usuarios</a>
+      <a href="/templates/prestamos">📋 Préstamos</a>
+      <a href="/templates/reservas">🔖 Reservas</a>
+      <a href="/templates/estanterias">📚 Estanterías</a>
+    </nav>
 
-<div class="container">
+    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <div class="container">
+      <!-- ===== SECCIÓN: Lista de Usuarios ===== -->
+      <div class="section fade-in">
+        <h2>📋 Lista de Usuarios</h2>
 
-    <h2>Lista de Usuarios</h2>
-    <button onclick="cargarUsuarios()">Cargar Usuarios</button>
+        <div class="form-group">
+          <button onclick="cargarUsuarios()">🔄 Cargar Usuarios</button>
+        </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th><th>Nombre</th><th>Email</th><th>Teléfono</th>
-            </tr>
-        </thead>
-        <tbody id="tabla-usuarios"></tbody>
-    </table>
+        <!-- Tabla de usuarios -->
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-usuarios">
+              <!-- Los datos se cargan dinámicamente -->
+            </tbody>
+          </table>
+        </div>
 
-    <h3>Crear Usuario</h3>
-    <input id="uid" placeholder="ID">
-    <input id="nombre" placeholder="Nombre">
-    <input id="correo" placeholder="Correo">
-    <input id="telefono" placeholder="Teléfono">
-    <button onclick="crearUsuario()">Crear</button>
+        <!-- Indicador de carga -->
+        <div id="loading-usuarios" class="loading">Cargando...</div>
+      </div>
 
-</div>
+      <!-- ===== SECCIÓN: Crear Usuario ===== -->
+      <div class="section fade-in">
+        <h2>➕ Crear Nuevo Usuario</h2>
 
-<script>
-async function cargarUsuarios() {
-    const datos = await fetchAPI("/usuarios/");
-    renderTable("tabla-usuarios", datos);
-}
+        <div class="form-group">
+          <input type="text" id="uid" placeholder="ID del usuario" />
+          <input type="text" id="nombre" placeholder="Nombre completo" />
+        </div>
 
-async function crearUsuario() {
-    const data = {
-        user_id: document.getElementById("uid").value,
-        nombre: document.getElementById("nombre").value,
-        correo: document.getElementById("correo").value,
-        telefono: document.getElementById("telefono").value
-    };
+        <div class="form-group">
+          <input type="email" id="correo" placeholder="Correo electrónico" />
+          <input type="tel" id="telefono" placeholder="Teléfono" />
+        </div>
 
-    await fetchAPI("/usuarios/", "POST", data);
-    alert("Usuario creado");
-    cargarUsuarios();
-}
-</script>
+        <button onclick="crearUsuario()" class="btn-success">
+          ✅ Crear Usuario
+        </button>
+      </div>
+    </div>
 
-</body>
+    <!-- ========== FOOTER ========== -->
+    <footer>
+      <p>Sistema de Gestión de Biblioteca © 2025</p>
+    </footer>
+
+    <!-- ========== SCRIPTS ========== -->
+    <script>
+      // URL base de la API
+      const API_BASE = "http://127.0.0.1:8000";
+
+      /**
+       * Cargar todos los usuarios desde la API
+       * Usa: GET /usuarios/
+       */
+      async function cargarUsuarios() {
+        mostrarLoading("loading-usuarios", true);
+        try {
+          const datos = await fetchAPI(`${API_BASE}/usuarios/`);
+          renderTablaUsuarios(datos);
+        } catch (error) {
+          mostrarError("Error al cargar usuarios");
+        }
+        mostrarLoading("loading-usuarios", false);
+      }
+
+      /**
+       * Crear un nuevo usuario
+       * Usa: POST /usuarios/
+       */
+      async function crearUsuario() {
+        const data = {
+          user_id: document.getElementById("uid").value.trim(),
+          nombre: document.getElementById("nombre").value.trim(),
+          correo: document.getElementById("correo").value.trim(),
+          telefono: document.getElementById("telefono").value.trim(),
+        };
+
+        // Validación básica
+        if (!data.user_id || !data.nombre || !data.correo) {
+          mostrarError("ID, Nombre y Correo son obligatorios");
+          return;
+        }
+
+        try {
+          await fetchAPI(`${API_BASE}/usuarios/`, "POST", data);
+          mostrarExito("Usuario creado exitosamente");
+          limpiarFormulario();
+          cargarUsuarios();
+        } catch (error) {
+          mostrarError("Error al crear usuario (¿ID duplicado?)");
+        }
+      }
+
+      // ========== FUNCIONES AUXILIARES ==========
+
+      /**
+       * Renderiza la tabla de usuarios
+       */
+      function renderTablaUsuarios(usuarios) {
+        const tabla = document.getElementById("tabla-usuarios");
+        tabla.innerHTML = "";
+
+        usuarios.forEach((usuario) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+                    <td>${usuario.user_id}</td>
+                    <td>${usuario.nombre}</td>
+                    <td>${usuario.correo}</td>
+                    <td>${usuario.telefono || "-"}</td>
+                `;
+          tabla.appendChild(tr);
+        });
+      }
+
+      function limpiarFormulario() {
+        ["uid", "nombre", "correo", "telefono"].forEach((id) => {
+          document.getElementById(id).value = "";
+        });
+      }
+
+      function mostrarLoading(id, show) {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle("active", show);
+      }
+
+      function mostrarExito(msg) {
+        alert("✅ " + msg);
+      }
+
+      function mostrarError(msg) {
+        alert("❌ " + msg);
+      }
+
+      // Cargar usuarios al iniciar
+      document.addEventListener("DOMContentLoaded", cargarUsuarios);
+    </script>
+  </body>
 </html>
