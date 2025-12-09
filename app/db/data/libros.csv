@@ -6,7 +6,7 @@ isbn,titulo,autor,peso,valor,stock,paginas,editorial,idioma
 9780451524935,1984,George Orwell,0.75,39000,6,328,Signet Classics,Inglés
 9780140449266,The Odyssey,Homer,0.9,45000,2,560,Penguin Classics,Inglés
 9780061120084,To Kill a Mockingbird,Harper Lee,0.82,41000,4,336,Harper Perennial,Inglés
-9789500756825,Rayuela,Julio Cortázar,1.0,53000,5,736,Alfaguara,Español
+9789500756825,Rayuela,Julio Cortázar,1.0,53000,4,736,Alfaguara,Español
 9780140449181,The Iliad,Homer,0.88,44000,3,704,Penguin Classics,Inglés
 9788420471839,Fahrenheit 451,Ray Bradbury,0.72,37000,7,240,Minotauro,Español
 9780307949486,Brave New World,Aldous Huxley,0.76,41000,3,288,Harper Perennial,Inglés
@@ -20,3 +20,4 @@ isbn,titulo,autor,peso,valor,stock,paginas,editorial,idioma
 1111111111112,Del amor y otros demonios,Gabriel García Márquez,0.7,30000,5,192,Sudamericana,Español
 1111111111113,La hojarasca,Gabriel García Márquez,0.62,31000,4,176,Sudamericana,Español
 1111111111111,Nuevo libro,Autor X,0.5,20000,0,150,Editorial X,Español
+5555555555555,Terror de McDonalds,Jhoan Sebastian,15.0,85000,2,350,Libros Nacho,Español

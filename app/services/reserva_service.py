@@ -114,7 +114,7 @@ class ReservaService:
         if not libro:
             return None
 
-        # Solo permitir reserva si el stock es 0 (requisito del proyecto)
+        # Solo permitir reserva si el stock es 0 
         if libro.stock > 0:
             return None
 
