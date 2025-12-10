@@ -30,5 +30,5 @@ def adaptar_estanterias_optimas(resultado_algo):
             )
         )
 
-      # Envolver la lista en el schema de respuesta
-      return EstanteriasOptimasResponse(resultado=estanterias)
+    # Envolver la lista en el schema de respuesta
+    return EstanteriasOptimasResponse(resultado=estanterias)
