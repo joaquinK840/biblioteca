@@ -5,9 +5,11 @@ from app.schemas.user_schema import UsuarioCreate, UsuarioOut, UsuarioUpdate
 from app.services.user_service import UsuarioService
 
 
+# Controlador de usuarios: orquesta UsuarioService y maneja errores HTTP
 class UsuarioController:
 
     @staticmethod
+    # Lista todos los usuarios
     def listar_usuarios():
         """Listar todos los usuarios.
 
@@ -17,6 +19,7 @@ class UsuarioController:
         return UsuarioService.cargar_usuarios()
 
     @staticmethod
+    # Obtiene un usuario por ID o 404 si no existe
     def obtener_usuario(user_id: str):
         """Obtener un usuario por ID.
 
@@ -31,6 +34,7 @@ class UsuarioController:
         return usuario
 
     @staticmethod
+    # Crea un usuario a partir del schema de entrada
     def crear_usuario(data: UsuarioCreate):
         """Crear un nuevo usuario.
 
@@ -46,6 +50,7 @@ class UsuarioController:
         return nuevo
 
     @staticmethod
+    # Actualiza un usuario por ID con los datos del schema
     def actualizar_usuario(user_id: str, data: UsuarioUpdate):
         """Actualizar un usuario por ID.
 
@@ -65,6 +70,7 @@ class UsuarioController:
         return actualizado
 
     @staticmethod
+    # Elimina un usuario por ID; retorna mensaje de éxito
     def eliminar_usuario(user_id: str):
         """Eliminar un usuario por ID.
 

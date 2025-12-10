@@ -4,9 +4,11 @@ from app.schemas.reserva_schema import ReservaCreate
 from app.services.reserva_service import ReservaService
 
 
+# Controlador de reservas: usa ReservaService y maneja errores HTTP
 class ReservaController:
 
     @staticmethod
+    # Lista todas las reservas
     def listar_reservas():
         """Listar todas las reservas.
 
@@ -16,6 +18,7 @@ class ReservaController:
         return ReservaService.listar()
 
     @staticmethod
+    # Obtiene una reserva por ID o 404 si no existe
     def obtener_reserva(reserva_id: str):
         """Obtener una reserva por ID.
 
@@ -30,6 +33,7 @@ class ReservaController:
         return reserva
 
     @staticmethod
+    # Crea una reserva validando usuario/libro y stock
     def crear_reserva(data: ReservaCreate):
         """Crear una nueva reserva.
 
@@ -50,6 +54,7 @@ class ReservaController:
         return nueva
 
     @staticmethod
+    # Elimina una reserva por ID; retorna mensaje de éxito
     def eliminar_reserva(reserva_id: str):
         """Eliminar una reserva por ID.
 
@@ -64,6 +69,7 @@ class ReservaController:
         return {"message": "Reserva eliminada"}
 
     @staticmethod
+    # Devuelve la cola FIFO de reservas para un libro
     def ver_cola_por_libro(isbn: str):
         """Ver la cola de reservas para un libro.
 

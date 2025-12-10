@@ -6,9 +6,11 @@ from app.schemas.libro_schema import LibroCreate, LibroOut, LibroUpdate
 from app.services.libro_service import LibroService
 
 
+# Controlador de libros: orquesta llamadas a LibroService y valida respuestas
 class LibroController:
 
     @staticmethod
+    # Lista todos los libros disponibles
     def listar_libros():
         """Listar todos los libros.
 
@@ -18,6 +20,7 @@ class LibroController:
         return LibroService.cargar_libros()
 
     @staticmethod
+    # Obtiene un libro por ISBN o lanza 404 si no existe
     def obtener_libro(isbn: str):
         """Obtener un libro por ISBN.
 
@@ -32,6 +35,7 @@ class LibroController:
         return libro
 
     @staticmethod
+    # Crea un libro nuevo a partir del schema de entrada
     def crear_libro(data: LibroCreate):
         """Crear un libro nuevo.
 
@@ -47,6 +51,7 @@ class LibroController:
         return nuevo
 
     @staticmethod
+    # Actualiza un libro por ISBN con los datos del schema
     def actualizar_libro(isbn: str, data: LibroUpdate):
         """Actualizar un libro por ISBN.
 
@@ -66,6 +71,7 @@ class LibroController:
         return actualizado
 
     @staticmethod
+    # Elimina un libro por ISBN; retorna mensaje de éxito
     def eliminar_libro(isbn: str):
         """Eliminar un libro por ISBN.
 
@@ -80,6 +86,7 @@ class LibroController:
         return {"message": "Libro eliminado"}
     
     @staticmethod
+    # Devuelve libros ordenados por ISBN (insertion sort)
     def libros_ordenados_isbn():
         """Devolver libros ordenados por ISBN.
 
@@ -92,6 +99,7 @@ class LibroController:
         return libros
     
     @staticmethod
+    # Devuelve libros ordenados por precio/valor (merge sort)
     def libros_ordenados_precio():
         """Devolver libros ordenados por precio/valor.
 
@@ -104,6 +112,7 @@ class LibroController:
         return libros
     
     @staticmethod
+    # Devuelve combinaciones deficientes (fuerza bruta)
     def estanteria_deficiente():
         """Detectar combinaciones deficientes (fuerza bruta).
 
@@ -116,6 +125,7 @@ class LibroController:
         return libros
     
     @staticmethod
+    # Devuelve estanterías óptimas (backtracking) adaptadas al schema
     def estanteria_optima():    
         """Calcular y devolver estanterías óptimas (backtracking).
 
@@ -128,6 +138,7 @@ class LibroController:
         return libros
     
     @staticmethod
+    # Suma de valor de libros por autor (recursión tipo pila)
     def valor_total_autor(autor: str):
         """Calcular valor total de libros de un autor.
 
@@ -141,6 +152,7 @@ class LibroController:
         return {"autor": autor, **resultado}
 
     @staticmethod
+    # Promedio de peso de libros por autor (tail recursion)
     def peso_promedio_autor(autor: str):
         """Calcular peso promedio de libros de un autor.
 
@@ -154,6 +166,7 @@ class LibroController:
         return {"autor": autor, **resultado}
 
     @staticmethod
+    # Búsqueda lineal de libros por título/autor en inventario general
     def buscar_lineal(texto: str):
         """Búsqueda lineal por título o autor en inventario general.
 

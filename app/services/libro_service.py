@@ -15,9 +15,11 @@ from app.utils.libros.inventario import Inventario
 
 CSV_PATH = "app/db/data/libros.csv"
 
+# Servicio de libros: lectura CSV, CRUD y utilidades/algoritmos
 class LibroService:
 
     @staticmethod
+    # Lee todos los libros del CSV y retorna la lista
     def cargar_libros() -> List[Libro]:
         """Leer todos los libros desde el CSV y devolver una lista de Libro.
 
@@ -32,6 +34,7 @@ class LibroService:
         return libros
 
     @staticmethod
+    # Sobrescribe el CSV con la lista proporcionada
     def guardar_libros(libros: List[Libro]):
         """Sobrescribir el CSV con la lista de libros dada.
 
@@ -47,6 +50,7 @@ class LibroService:
                 writer.writerow(libro.__dict__)
 
     @staticmethod
+    # Busca un libro por su ISBN, o None si no existe
     def obtener_por_isbn(isbn: str) -> Optional[Libro]:
         """Buscar un libro por su ISBN.
 
@@ -60,6 +64,7 @@ class LibroService:
         return None
 
     @staticmethod
+    # Crea un libro si no hay duplicado de ISBN
     def crear(libro: Libro):
         """Crear un nuevo libro si no existe otro con el mismo ISBN.
 
@@ -78,6 +83,7 @@ class LibroService:
         return libro
 
     @staticmethod
+    # Actualiza el libro con ese ISBN usando los datos dados
     def actualizar(isbn: str, data: Libro):
         """Actualizar los datos de un libro identificado por ISBN.
 
@@ -95,6 +101,7 @@ class LibroService:
         return None
 
     @staticmethod
+    # Elimina por ISBN; retorna True si lo encontró y borró
     def eliminar(isbn: str):
         """Eliminar un libro por ISBN.
 
@@ -110,6 +117,7 @@ class LibroService:
         return True
 
     @staticmethod
+    # Devuelve la lista ordenada por ISBN (insertion sort)
     def ordernar_por_isbn() -> List[Libro]:
         """Devolver lista de libros ordenada por ISBN (insertion sort).
 
@@ -121,6 +129,7 @@ class LibroService:
         return ordedanados
     
     @staticmethod
+    # Devuelve la lista ordenada por precio/valor (merge sort)
     def obtener_por_precio():
         """Devolver lista de libros ordenada por precio/valor (merge sort).
 
@@ -132,6 +141,7 @@ class LibroService:
         return ordenados
 
     @staticmethod
+    # Búsqueda lineal por título/autor en inventario general
     def buscar_lineal(texto: str) -> List[Libro]:
         """Buscar por título o autor sobre el inventario general (lista desordenada).
 
@@ -150,6 +160,7 @@ class LibroService:
         return inventario.buscar_lineal(texto)
     
     @staticmethod
+    # Detecta combinaciones deficientes por fuerza bruta (peso>8)
     def estanteria_deficiente():
         """Detectar combinaciones deficientes por fuerza bruta (peso>8).
 
@@ -163,6 +174,7 @@ class LibroService:
 
 
     @staticmethod
+    # Calcula estanterías óptimas (backtracking) y adapta al schema
     def estanteria_optima():
         """Calcular estanterías óptimas mediante backtracking y adaptar el resultado.
 
@@ -174,6 +186,7 @@ class LibroService:
         return adaptar_estanterias_optimas(salida)
     
     @staticmethod
+    # Suma de valor de libros de un autor (recursión tipo pila)
     def valor_total_por_autor(autor: str):
         """Calcular el valor total de libros de un autor usando recursión (pila).
 
@@ -190,6 +203,7 @@ class LibroService:
 
 
     @staticmethod
+    # Promedio de peso de libros de un autor (tail recursion)
     def peso_promedio_por_autor(autor: str):
         """Calcular el peso promedio de libros de un autor usando recursión tail.
 

@@ -9,6 +9,7 @@ Clase Cola:
 import json
 import os
 
+# Clase Cola (FIFO): cola de reservas por libro
 class Cola:
     """Estructura FIFO para cola de reservas por libro.
 
@@ -22,9 +23,11 @@ class Cola:
     - guardar_en_archivo(ruta_archivo): Guarda la cola en un archivo JSON.
     - cargar_desde_archivo(ruta_archivo): Carga la cola desde un archivo JSON.
     """
+    # Constructor: inicia la cola vacía
     def __init__(self):
         self._items = []
 
+    # Encola: añade al final de la cola
     def enqueue(self, item):
         """Añade un elemento al final de la cola.
 
@@ -36,6 +39,7 @@ class Cola:
         """
         self._items.append(item)
 
+    # Desencola: extrae y devuelve el primero
     def dequeue(self):
         """Extrae el primer elemento de la cola.
 
@@ -46,6 +50,7 @@ class Cola:
             return None
         return self._items.pop(0)
 
+    # Indica si no hay elementos en la cola
     def is_empty(self) -> bool:
         """Indica si la cola está vacía.
 
@@ -54,10 +59,12 @@ class Cola:
         """
         return len(self._items) == 0
 
+    # Tamaño actual de la cola
     def __len__(self):
         """Número de elementos en la cola."""
         return len(self._items)
 
+    # Copia superficial de los elementos (no referencia original)
     def to_list(self):
         """Devuelve una copia de la lista interna (no la referencia).
 
@@ -65,6 +72,7 @@ class Cola:
         """
         return list(self._items)
     
+    # Consulta el primer elemento sin quitarlo
     def peek(self):
         """Devuelve el primer elemento de la cola sin quitarlo.
         
@@ -75,6 +83,7 @@ class Cola:
             return None
         return self._items[0]
 
+    # Serializa la cola a un archivo JSON
     def guardar_en_archivo(self, ruta_archivo):
         """Guarda la cola en un archivo JSON.
         
@@ -103,6 +112,7 @@ class Cola:
         except Exception as e:
             print(f"Error al guardar la cola: {e}")
 
+    # Carga la cola desde un archivo JSON existente
     def cargar_desde_archivo(self, ruta_archivo):
         """Carga la cola desde un archivo JSON.
         
@@ -135,6 +145,7 @@ class Cola:
             print(f"Error al cargar la cola: {e}")
             self._items = []
 
+    # Vacía todos los elementos de la cola
     def limpiar(self):
         """Vacía completamente la cola.
         

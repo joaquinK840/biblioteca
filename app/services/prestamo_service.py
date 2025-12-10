@@ -15,6 +15,7 @@ from app.utils.libros.inventario import Inventario
 CSV_PATH = "app/db/data/prestamos.csv"
 
 
+# Servicio de préstamos: CRUD, devoluciones y historial (Pila)
 class PrestamoService:
     """Servicio para gestión de préstamos.
 
@@ -23,6 +24,7 @@ class PrestamoService:
     """
 
     @staticmethod
+    # Crea el CSV si no existe (cabeceras incluidas)
     def _ensure_file_exists():
         """Crear el archivo CSV de préstamos si no existe.
 
@@ -44,6 +46,7 @@ class PrestamoService:
                 )
 
     @staticmethod
+    # Lee todos los préstamos del CSV y retorna la lista
     def cargar_prestamos() -> List[Prestamo]:
         """Leer todos los préstamos desde el CSV y devolver una lista de Prestamo.
 
@@ -68,6 +71,7 @@ class PrestamoService:
         return prestamos
 
     @staticmethod
+    # Sobrescribe el CSV con la lista de préstamos proporcionada
     def guardar_prestamos(prestamos: List[Prestamo]):
         """Sobrescribir el CSV de préstamos con la lista dada.
 
@@ -90,6 +94,7 @@ class PrestamoService:
                 writer.writerow(p.__dict__)
 
     @staticmethod
+    # Genera un ID secuencial nuevo basado en los existentes
     def _generar_id(prestamos: List[Prestamo]) -> str:
         """Generar un nuevo ID secuencial para un préstamo a partir de la lista existente.
 
@@ -105,11 +110,13 @@ class PrestamoService:
     # CRUD básico
 
     @staticmethod
+    # Devuelve todos los préstamos
     def listar() -> List[Prestamo]:
         """Devolver todos los préstamos (lista)."""
         return PrestamoService.cargar_prestamos()
 
     @staticmethod
+    # Busca un préstamo por su ID, o None si no existe
     def obtener_por_id(prestamo_id: str) -> Optional[Prestamo]:
         """Buscar un préstamo por su prestamo_id.
 
@@ -123,6 +130,7 @@ class PrestamoService:
         return None
 
     @staticmethod
+    # Crea un préstamo si usuario y libro existen y hay stock
     def crear(user_id: str, isbn: str) -> Optional[Prestamo]:
         """Crear un nuevo préstamo si usuario y libro existen y hay stock.
 
@@ -166,6 +174,7 @@ class PrestamoService:
         return nuevo
 
     @staticmethod
+    # Registra devolución: marca devuelto, fecha, actualiza stock y reservas
     def registrar_devolucion(prestamo_id: str) -> Optional[Prestamo]:
         """Registrar la devolución de un préstamo.
 
@@ -228,6 +237,7 @@ class PrestamoService:
         return prestamo_encontrado
 
     @staticmethod
+    # Elimina un préstamo por ID; True si lo borró
     def eliminar(prestamo_id: str) -> bool:
         """Eliminar un préstamo por id.
 
@@ -245,6 +255,7 @@ class PrestamoService:
     # 🔹 Historial de préstamos por usuario usando Pila (requisito del proyecto)
 
     @staticmethod
+    # Construye una Pila con el historial cronológico de un usuario
     def historial_por_usuario(user_id: str) -> Pila:
         """Construir y devolver una Pila con el historial de préstamos de un usuario.
 

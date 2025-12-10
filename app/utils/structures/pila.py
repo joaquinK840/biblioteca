@@ -11,6 +11,7 @@ Clase Pila:
 import json
 import os
 
+# Clase Pila (LIFO): historial de préstamos por usuario
 class Pila:
     """Estructura LIFO para historial de préstamos por usuario.
     
@@ -26,10 +27,12 @@ class Pila:
     - limpiar(): Vacía completamente la pila.
     """
 
+    # Constructor: inicia la pila vacía
     def __init__(self):
         """Inicializa una pila vacía."""
         self._items = []
 
+    # Apila un elemento arriba del todo
     def push(self, item):
         """Añade un elemento al tope de la pila.
         
@@ -45,6 +48,7 @@ class Pila:
         """
         self._items.append(item)
 
+    # Desapila y devuelve el elemento superior
     def pop(self):
         """Extrae y devuelve el elemento del tope de la pila.
         
@@ -61,6 +65,7 @@ class Pila:
             return None
         return self._items.pop()
 
+    # Consulta el elemento superior sin quitarlo
     def peek(self):
         """Devuelve el elemento del tope sin quitarlo de la pila.
         
@@ -79,6 +84,7 @@ class Pila:
             return None
         return self._items[-1]
 
+    # Indica si la pila no tiene elementos
     def is_empty(self) -> bool:
         """Verifica si la pila está vacía.
         
@@ -87,6 +93,7 @@ class Pila:
         """
         return len(self._items) == 0
 
+    # Tamaño actual de la pila
     def __len__(self):
         """Devuelve el número de elementos en la pila.
         
@@ -95,6 +102,7 @@ class Pila:
         """
         return len(self._items)
 
+    # Copia de elementos en orden LIFO (más reciente primero)
     def to_list(self):
         """Devuelve una copia de la pila como lista (más reciente primero).
         
@@ -105,6 +113,7 @@ class Pila:
         """
         return list(reversed(self._items))
     
+    # Serializa la pila a un archivo JSON
     def guardar_en_archivo(self, ruta_archivo):
         """Guarda la pila en un archivo JSON.
         
@@ -133,6 +142,7 @@ class Pila:
         except Exception as e:
             print(f"Error al guardar la pila: {e}")
     
+    # Carga la pila desde un archivo JSON existente
     def cargar_desde_archivo(self, ruta_archivo):
         """Carga la pila desde un archivo JSON.
         
@@ -165,6 +175,7 @@ class Pila:
             print(f"Error al cargar la pila: {e}")
             self._items = []
 
+    # Vacía todos los elementos de la pila
     def limpiar(self):
         """Vacía completamente la pila.
         

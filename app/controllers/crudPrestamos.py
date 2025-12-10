@@ -4,9 +4,11 @@ from app.schemas.prestamo_schema import PrestamoCreate, PrestamoUpdate
 from app.services.prestamo_service import PrestamoService
 
 
+# Controlador de préstamos: usa PrestamoService y maneja errores HTTP
 class PrestamoController:
 
     @staticmethod
+    # Lista todos los préstamos
     def listar_prestamos():
         """Obtener todos los préstamos.
 
@@ -16,6 +18,7 @@ class PrestamoController:
         return PrestamoService.listar()
 
     @staticmethod
+    # Obtiene un préstamo por ID o 404 si no existe
     def obtener_prestamo(prestamo_id: str):
         """Obtener un préstamo por su ID.
 
@@ -30,6 +33,7 @@ class PrestamoController:
         return prestamo
 
     @staticmethod
+    # Crea un préstamo validando usuario/libro/stock
     def crear_prestamo(data: PrestamoCreate):
         """Crear un nuevo préstamo.
 
@@ -50,6 +54,7 @@ class PrestamoController:
         return nuevo
 
     @staticmethod
+    # Registra devolución y desencadena asignación de reservas
     def registrar_devolucion(prestamo_id: str):
         """Registrar la devolución de un préstamo.
 
@@ -64,6 +69,7 @@ class PrestamoController:
         return actualizado
 
     @staticmethod
+    # Elimina un préstamo por ID; retorna mensaje de éxito
     def eliminar_prestamo(prestamo_id: str):
         """Eliminar un préstamo por ID.
 
@@ -78,6 +84,7 @@ class PrestamoController:
         return {"message": "Préstamo eliminado"}
 
     @staticmethod
+    # Devuelve historial de préstamos del usuario como lista (LIFO)
     def historial_usuario(user_id: str):
         """Obtener historial de préstamos de un usuario.
 

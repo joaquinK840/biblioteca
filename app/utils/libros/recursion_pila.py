@@ -1,4 +1,4 @@
-
+# Suma de valores con recursión tipo pila (post-order)
 def valor_total_recursivo_con_libros(libros, index):
     """Recursión tipo pila (post-order) para procesar listas de libros.
 
@@ -15,9 +15,11 @@ Función:
     * Funciona recursivamente descendiendo hasta index < 0 como caso base.
     * Convierte `valor` a float al sumar.
 """
+    # Caso base: índice negativo → no hay más elementos
     if index < 0:
         return 0, []
     
+    # Llamada recursiva primero, luego procesamos el elemento actual
     subtotal, titulos = valor_total_recursivo_con_libros(libros, index - 1)
     titulos.append(libros[index].titulo)
     return subtotal + float(libros[index].valor), titulos

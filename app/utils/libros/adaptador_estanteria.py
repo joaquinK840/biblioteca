@@ -3,6 +3,7 @@ from app.schemas.estanterias_optimas_schema import (EstanteriaOptima,
                                                     EstanteriasOptimasResponse)
 
 
+# Convierte el resultado del algoritmo a los schemas de respuesta
 def adaptar_estanterias_optimas(resultado_algo):
     """Adaptador: convierte la salida del algoritmo de estanterías al schema de respuesta.
     
@@ -16,9 +17,10 @@ def adaptar_estanterias_optimas(resultado_algo):
       - Requiere:
         * Que los schemas EstanteriaOptima y EstanteriasOptimasResponse estén disponibles e importables.
     """
-    estanterias = []
+    estanterias = []  # Lista de objetos EstanteriaOptima para la respuesta
 
     for est in resultado_algo["resultado"]:
+        # Crear el objeto de estantería óptima a partir del dict del algoritmo
         estanterias.append(
             EstanteriaOptima(
                 estanteria=est["estanteria"],
@@ -28,4 +30,5 @@ def adaptar_estanterias_optimas(resultado_algo):
             )
         )
 
-    return EstanteriasOptimasResponse(resultado=estanterias)
+      # Envolver la lista en el schema de respuesta
+      return EstanteriasOptimasResponse(resultado=estanterias)

@@ -11,9 +11,11 @@ from app.utils.structures.cola import Cola
 CSV_PATH = "app/db/data/reservas.csv"
 
 
+# Servicio de reservas: CRUD y asignación automática (FIFO)
 class ReservaService:
 
     @staticmethod
+    # Crea el CSV si no existe (cabecera incluida)
     def _ensure_file_exists():
         """Crear el archivo CSV de reservas si no existe.
 
@@ -26,6 +28,7 @@ class ReservaService:
                 writer.writerow(["reserva_id", "user_id", "isbn", "fecha_reserva"])
 
     @staticmethod
+    # Lee todas las reservas del CSV y retorna la lista
     def cargar_reservas() -> List[Reserva]:
         """Leer todas las reservas desde CSV y devolver lista de Reserva.
 
@@ -48,6 +51,7 @@ class ReservaService:
         return reservas
 
     @staticmethod
+    # Sobrescribe el CSV con la lista de reservas proporcionada
     def guardar_reservas(reservas: List[Reserva]):
         """Guardar la lista completa de reservas en el CSV (sobrescribe).
 
@@ -63,6 +67,7 @@ class ReservaService:
                 writer.writerow(r.__dict__)
 
     @staticmethod
+    # Genera un ID secuencial nuevo basado en las reservas existentes
     def _generar_id(reservas: List[Reserva]) -> str:
         """Generar un nuevo id secuencial para reservas.
 
@@ -78,11 +83,13 @@ class ReservaService:
     # CRUD básico
 
     @staticmethod
+    # Devuelve todas las reservas
     def listar() -> List[Reserva]:
         """Devolver todas las reservas."""
         return ReservaService.cargar_reservas()
 
     @staticmethod
+    # Busca una reserva por su ID, o None si no existe
     def obtener_por_id(reserva_id: str) -> Optional[Reserva]:
         """Buscar reserva por reserva_id.
 
@@ -96,6 +103,7 @@ class ReservaService:
         return None
 
     @staticmethod
+    # Crea una reserva solo si usuario/libro existen y no hay stock
     def crear(user_id: str, isbn: str) -> Optional[Reserva]:
         """Crear una nueva reserva solo si el usuario y el libro existen y no hay stock.
 
@@ -133,6 +141,7 @@ class ReservaService:
         return nueva
 
     @staticmethod
+    # Elimina una reserva por ID; True si la borró
     def eliminar(reserva_id: str) -> bool:
         """Eliminar una reserva por id.
 
@@ -150,6 +159,7 @@ class ReservaService:
     # 🔹 Cola de reservas por libro (FIFO), requisito del proyecto
 
     @staticmethod
+    # Construye una Cola FIFO con las reservas de un libro
     def cola_por_libro(isbn: str) -> Cola:
         """Construir y devolver una Cola (FIFO) con reservas del libro dado.
 
@@ -166,6 +176,7 @@ class ReservaService:
         return cola
 
     @staticmethod
+    # Asigna la siguiente reserva al devolver un libro (FIFO)
     def asignar_siguiente_reserva(isbn: str):
         """Asignar la siguiente reserva pendiente al devolver un libro.
 

@@ -6,9 +6,11 @@ from app.models.user_model import Usuario
 
 CSV_PATH = "app/db/data/usuarios.csv"
 
+# Servicio de usuarios: CRUD sobre CSV
 class UsuarioService:
 
     @staticmethod
+    # Crea el CSV si no existe (cabecera incluida)
     def _ensure_file_exists():
         """Crear el archivo CSV si no existe.
         
@@ -21,6 +23,7 @@ class UsuarioService:
                 writer.writerow(["user_id", "nombre", "correo", "telefono"])
 
     @staticmethod
+    # Lee todos los usuarios del CSV y retorna la lista
     def cargar_usuarios() -> List[Usuario]:
         """Cargar todos los usuarios desde el CSV.
 
@@ -36,6 +39,7 @@ class UsuarioService:
         return usuarios
 
     @staticmethod
+    # Sobrescribe el CSV con la lista de usuarios proporcionada
     def guardar_usuarios(usuarios: List[Usuario]):
         """Guardar la lista completa de usuarios en el CSV (sobrescribe).
 
@@ -51,6 +55,7 @@ class UsuarioService:
                 writer.writerow(u.__dict__)
 
     @staticmethod
+    # Busca un usuario por su ID, o None si no existe
     def obtener_por_id(user_id: str) -> Optional[Usuario]:
         """Buscar un usuario por su user_id.
 
@@ -64,6 +69,7 @@ class UsuarioService:
         return None
 
     @staticmethod
+    # Crea un usuario si no hay duplicado de user_id
     def crear(usuario: Usuario):
         """Crear un nuevo usuario si no existe otro con el mismo user_id.
 
@@ -82,6 +88,7 @@ class UsuarioService:
         return usuario
 
     @staticmethod
+    # Actualiza el usuario con ese ID usando los datos dados
     def actualizar(user_id: str, data: Usuario):
         """Actualizar un usuario identificado por user_id con los datos proporcionados.
 
@@ -99,6 +106,7 @@ class UsuarioService:
         return None
 
     @staticmethod
+    # Elimina por ID; retorna True si lo encontró y borró
     def eliminar(user_id: str):
         """Eliminar un usuario por user_id.
 
