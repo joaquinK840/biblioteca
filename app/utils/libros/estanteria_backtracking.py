@@ -1,20 +1,20 @@
 
 # Optimal shelf selection (backtracking with pruning)
 def estanteria_backtracking(libros, peso_max=8.0):
-        """Backtracking algorithm to assign shelves maximizing value without exceeding weight.
+    """Backtracking algorithm to assign shelves maximizing value without exceeding weight.
 
-Function:
-- estanteria_backtracking(libros, peso_max=8.0)
-    - Receives:
-        * libros: list of objects with at least 'titulo', 'peso', 'valor'.
-        * peso_max: weight limit per shelf (float).
-    - Returns:
-        * dict {"resultado": [ { "estanteria": int, "libros": [titles], "peso_total": float, "precio_total": float }, ... ] }
-    - Side effects:
-        * Adds/sets attribute `estanteria` on each book object to indicate assigned shelf (0 = unassigned).
-    - Note:
-        * Attempts to pack books into shelves maximizing value without exceeding `peso_max`, with up to 4 books per shelf.
-"""
+    Function:
+    - estanteria_backtracking(libros, peso_max=8.0)
+        - Receives:
+            * libros: list of objects with at least 'titulo', 'peso', 'valor'.
+            * peso_max: weight limit per shelf (float).
+        - Returns:
+            * dict {"resultado": [ { "estanteria": int, "libros": [titles], "peso_total": float, "precio_total": float }, ... ] }
+        - Side effects:
+            * Adds/sets attribute `estanteria` on each book object to indicate assigned shelf (0 = unassigned).
+        - Note:
+            * Attempts to pack books into shelves maximizing value without exceeding `peso_max`, with up to 4 books per shelf.
+    """
     # Step 1: initialize all books with no shelf assigned
     for libro in libros:
         setattr(libro, "estanteria", 0)

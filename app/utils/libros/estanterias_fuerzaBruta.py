@@ -1,19 +1,19 @@
 
 def estanterias_fuerzaBruta(libros):
-        """Brute-force search for 4-book combinations whose total weight exceeds a threshold.
+    """Brute-force search for 4-book combinations whose total weight exceeds a threshold.
 
-Function:
-- estanterias_fuerzaBruta(libros)
-    - Receives:
-        * libros: list of objects with `peso` and `titulo` attributes.
-    - Returns:
-        * list of dictionaries with keys:
-            - "libros": list of titles in the combination
-            - "peso_total": sum of the weights of the 4 books
-    - Behavior:
-        * Iterates all 4-element combinations without repetition (O(n^4)).
-        * Adds to result the combinations whose peso_total > 8.
-"""
+    Function:
+    - estanterias_fuerzaBruta(libros)
+        - Receives:
+            * libros: list of objects with `peso` and `titulo` attributes.
+        - Returns:
+            * list of dictionaries with keys:
+                - "libros": list of titles in the combination
+                - "peso_total": sum of the weights of the 4 books
+        - Behavior:
+            * Iterates all 4-element combinations without repetition (O(n^4)).
+            * Adds to result the combinations whose peso_total > 8.
+    """
     resultado = []
     n = len(libros)
 

@@ -1,16 +1,16 @@
 
 def ordenar_libros_por_precio(libros):
-        """Sort books by price/value using merge sort.
+    """Sort books by price/value using merge sort.
 
-Public function:
-- ordenar_libros_por_precio(libros)
-    - Receives:
-        * libros: list of objects with at least attribute `valor` (numeric or convertible to float).
-    - Returns:
-        * list sorted ascending by attribute `valor`.
-    - Note:
-        * Does not modify the original list (creates and returns a new list).
-"""
+    Public function:
+    - ordenar_libros_por_precio(libros)
+        - Receives:
+            * libros: list of objects with at least attribute `valor` (numeric or convertible to float).
+        - Returns:
+            * list sorted ascending by attribute `valor`.
+        - Note:
+            * Does not modify the original list (creates and returns a new list).
+    """
 
     def merge_sort(lista):
         if len(lista) <= 1:
