@@ -1,32 +1,32 @@
 
 def estanterias_fuerzaBruta(libros):
-    """Búsqueda por fuerza bruta de combinaciones de 4 libros cuyo peso supera un umbral.
+        """Brute-force search for 4-book combinations whose total weight exceeds a threshold.
 
-Función:
+Function:
 - estanterias_fuerzaBruta(libros)
-  - Recibe:
-    * libros: lista de objetos con atributo `peso` y `titulo`.
-  - Devuelve:
-    * lista de diccionarios con claves:
-      - "libros": lista de títulos de la combinación
-      - "peso_total": suma de los pesos de los 4 libros
-  - Comportamiento:
-    * Recorre todas las combinaciones de 4 elementos sin repetición (O(n^4)).
-    * Añade a resultado las combinaciones cuyo peso_total > 8.
+    - Receives:
+        * libros: list of objects with `peso` and `titulo` attributes.
+    - Returns:
+        * list of dictionaries with keys:
+            - "libros": list of titles in the combination
+            - "peso_total": sum of the weights of the 4 books
+    - Behavior:
+        * Iterates all 4-element combinations without repetition (O(n^4)).
+        * Adds to result the combinations whose peso_total > 8.
 """
     resultado = []
     n = len(libros)
 
-    # Recorremos todas las combinaciones posibles de 4 libros sin repetir
+    # Iterate all possible 4-book combinations without repetition
     for i in range(n):
         for j in range(i + 1, n):
             for k in range(j + 1, n):
                 for l in range(k + 1, n):
 
-                    # Obtener los 4 libros
+                    # Get the 4 books
                     combo = [libros[i], libros[j], libros[k], libros[l]]
 
-                    # Calcular el peso total
+                    # Calculate total weight
                     peso_total = (
                         combo[0].peso +
                         combo[1].peso +
@@ -34,7 +34,7 @@ Función:
                         combo[3].peso
                     )
 
-                    # Verificar si superan el umbral de riesgo
+                    # Check if they exceed the risk threshold
                     if peso_total > 8:
                         resultado.append({
                             "libros": [libro.titulo for libro in combo],

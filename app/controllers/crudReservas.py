@@ -4,43 +4,43 @@ from app.schemas.reserva_schema import ReservaCreate
 from app.services.reserva_service import ReservaService
 
 
-# Controlador de reservas: usa ReservaService y maneja errores HTTP
+# Reservations controller: uses ReservaService and handles HTTP errors
 class ReservaController:
 
     @staticmethod
-    # Lista todas las reservas
+    # List all reservations
     def listar_reservas():
-        """Listar todas las reservas.
+        """List all reservations.
 
-        Parámetros: ninguno.
-        Retorna: List[Reserva].
+        Parameters: none.
+        Returns: List[Reserva].
         """
         return ReservaService.listar()
 
     @staticmethod
-    # Obtiene una reserva por ID o 404 si no existe
+    # Get a reservation by ID or 404 if not found
     def obtener_reserva(reserva_id: str):
-        """Obtener una reserva por ID.
+        """Get a reservation by ID.
 
-        Parámetros:
+        Parameters:
         - reserva_id: str
-        Retorna: Reserva si existe.
-        Lanza: HTTPException 404 si no se encuentra.
+        Returns: Reserva if it exists.
+        Raises: HTTPException 404 if not found.
         """
         reserva = ReservaService.obtener_por_id(reserva_id)
         if not reserva:
-            raise HTTPException(status_code=404, detail="Reserva no encontrada")
+            raise HTTPException(status_code=404, detail="Reservation not found")
         return reserva
 
     @staticmethod
-    # Crea una reserva validando usuario/libro y stock
+    # Create a reservation validating user/book and stock
     def crear_reserva(data: ReservaCreate):
-        """Crear una nueva reserva.
+        """Create a new reservation.
 
-        Parámetros:
+        Parameters:
         - data: ReservaCreate (user_id, isbn).
-        Retorna: Reserva creada.
-        Lanza: HTTPException 400 si la creación no es válida.
+        Returns: Created Reserva.
+        Raises: HTTPException 400 if creation is not valid.
         """
         nueva = ReservaService.crear(
             user_id=data.user_id,
@@ -49,33 +49,33 @@ class ReservaController:
         if not nueva:
             raise HTTPException(
                 status_code=400,
-                detail="No se pudo crear la reserva (usuario/libro inválido o el libro aún tiene stock)",
+                detail="Could not create reservation (invalid user/book or the book still has stock)",
             )
         return nueva
 
     @staticmethod
-    # Elimina una reserva por ID; retorna mensaje de éxito
+    # Delete a reservation by ID; return success message
     def eliminar_reserva(reserva_id: str):
-        """Eliminar una reserva por ID.
+        """Delete a reservation by ID.
 
-        Parámetros:
+        Parameters:
         - reserva_id: str
-        Retorna: dict con mensaje de éxito.
-        Lanza: HTTPException 404 si no se encuentra.
+        Returns: dict with success message.
+        Raises: HTTPException 404 if not found.
         """
         eliminado = ReservaService.eliminar(reserva_id)
         if not eliminado:
-            raise HTTPException(status_code=404, detail="Reserva no encontrada")
-        return {"message": "Reserva eliminada"}
+            raise HTTPException(status_code=404, detail="Reservation not found")
+        return {"message": "Reservation deleted"}
 
     @staticmethod
-    # Devuelve la cola FIFO de reservas para un libro
+    # Return the FIFO queue of reservations for a book
     def ver_cola_por_libro(isbn: str):
-        """Ver la cola de reservas para un libro.
+        """View the reservation queue for a book.
 
-        Parámetros:
+        Parameters:
         - isbn: str
-        Retorna: lista de reservas en orden FIFO.
+        Returns: list of reservations in FIFO order.
         """
         cola = ReservaService.cola_por_libro(isbn)
         return cola.to_list()

@@ -1,25 +1,25 @@
-# Suma de valores con recursión tipo pila (post-order)
+# Sum of values using stack-style recursion (post-order)
 def valor_total_recursivo_con_libros(libros, index):
-    """Recursión tipo pila (post-order) para procesar listas de libros.
+    """Stack-style recursion (post-order) to process book lists.
 
-Función:
+Function:
 - valor_total_recursivo_con_libros(libros, index)
-  - Recibe: 
-    * libros: lista de objetos con atributos al menos 'titulo' y 'valor'.
-    * index: índice entero que indica la posición actual (se suele llamar con len(libros)-1).
-  - Devuelve:
+  - Receives: 
+    * libros: list of objects with at least 'titulo' and 'valor' attributes.
+    * index: integer indicating current position (usually called with len(libros)-1).
+  - Returns:
     * (subtotal: float, titulos: list[str])
-      - subtotal: suma de los campos `valor` desde 0 hasta index inclusive.
-      - titulos: lista de títulos acumulada en orden de extracción recursiva.
-  - Comportamiento:
-    * Funciona recursivamente descendiendo hasta index < 0 como caso base.
-    * Convierte `valor` a float al sumar.
+      - subtotal: sum of `valor` fields from 0 to index inclusive.
+      - titulos: list of titles accumulated in recursive extraction order.
+  - Behavior:
+    * Works recursively descending until index < 0 as base case.
+    * Converts `valor` to float when summing.
 """
-    # Caso base: índice negativo → no hay más elementos
+    # Base case: negative index → no more elements
     if index < 0:
         return 0, []
     
-    # Llamada recursiva primero, luego procesamos el elemento actual
+    # Recurse first, then process the current element (post-order)
     subtotal, titulos = valor_total_recursivo_con_libros(libros, index - 1)
     titulos.append(libros[index].titulo)
     return subtotal + float(libros[index].valor), titulos

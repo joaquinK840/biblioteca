@@ -10,73 +10,73 @@ from app.routes.prestamos_routes import router as prestamos_router
 from app.routes.reservas_routes import router as reservas_router
 from app.routes.estanterias import router as estanterias_router
 
-# Aplicación FastAPI principal
+# FastAPI application entrypoint
 app = FastAPI(title="CSV Library API")
 
-# CORS: permite solicitudes del frontend (ajusta orígenes en producción)
+# CORS: allow frontend requests (restrict origins in production)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # En producción, especificar dominios concretos
+    allow_origins=["*"],  # In production, specify concrete domains
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Archivos estáticos: CSS/JS/imagenes bajo /static
+# Static files: CSS/JS/images under /static
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
-# Templates HTML con Jinja2 (carpeta app/templates)
+# HTML templates via Jinja2 (folder app/templates)
 templates = Jinja2Templates(directory="app/templates")
 
 
 # ============================================
-# RUTAS DE VISTAS (Templates HTML)
+# VIEW ROUTES (HTML Templates)
 # ============================================
 
-# Vista: página principal (dashboard)
+# View: homepage (dashboard)
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    """Página principal - Dashboard"""
+    """Homepage - Dashboard"""
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-# Vista: gestión de libros
+# View: books management
 @app.get("/templates/libros", response_class=HTMLResponse)
 def vista_libros(request: Request):
-    """Vista de gestión de libros"""
+    """Books management view"""
     return templates.TemplateResponse("libros.html", {"request": request})
 
 
-# Vista: gestión de usuarios
+# View: users management
 @app.get("/templates/usuarios", response_class=HTMLResponse)
 def vista_usuarios(request: Request):
-    """Vista de gestión de usuarios"""
+    """Users management view"""
     return templates.TemplateResponse("usuarios.html", {"request": request})
 
 
-# Vista: gestión de préstamos
+# View: loans management
 @app.get("/templates/prestamos", response_class=HTMLResponse)
 def vista_prestamos(request: Request):
-    """Vista de gestión de préstamos"""
+    """Loans management view"""
     return templates.TemplateResponse("prestamos.html", {"request": request})
 
 
-# Vista: gestión de reservas
+# View: reservations management
 @app.get("/templates/reservas", response_class=HTMLResponse)
 def vista_reservas(request: Request):
-    """Vista de gestión de reservas"""
+    """Reservations management view"""
     return templates.TemplateResponse("reservas.html", {"request": request})
 
 
-# Vista: módulo de estanterías
+# View: shelves module
 @app.get("/templates/estanterias", response_class=HTMLResponse)
 def vista_estanterias(request: Request):
-    """Vista de módulo de estanterías"""
+    """Shelves module view"""
     return templates.TemplateResponse("estanterias.html", {"request": request})
 
 
-# Routers API: registra endpoints JSON
-# (libros, usuarios, préstamos, reservas, estanterías)
+# API routers: register JSON endpoints
+# (books, users, loans, reservations, shelves)
 app.include_router(libros_router)
 app.include_router(user_router)
 app.include_router(prestamos_router)

@@ -60,8 +60,4 @@ app/
 - `GET /reservas`, `POST /reservas`, `GET /reservas/cola/{isbn}`: CRUD + cola FIFO.
 - `GET /usuarios`: Gestión de usuarios.
 
-## Desarrollo rápido
 
-- Variables y comentarios en español y concisos para facilitar la lectura.
-- Algoritmos documentados con una línea encima de cada función/clase.
-- Usa CSV como almacenamiento sencillo; no requiere BD.

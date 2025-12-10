@@ -1,165 +1,164 @@
-"""Estructura de datos: Cola FIFO simple.
+"""Data structure: Simple FIFO queue.
 
-Clase Cola:
-- Uso: almacenar elementos en orden FIFO.
-- No impone tipos sobre los elementos almacenados.
-- Métodos documentados indican valores de retorno y comportamiento en casos límite.
+Queue class:
+- Purpose: store elements in FIFO order.
+- Does not enforce types on stored elements.
+- Methods document return values and edge-case behavior.
 """
 
 import json
 import os
 
-# Clase Cola (FIFO): cola de reservas por libro
+# Queue (FIFO): reservation queue per book
 class Cola:
-    """Estructura FIFO para cola de reservas por libro.
+    """FIFO queue used for per-book reservations.
 
-    Métodos:
-    - enqueue(item): Añade `item` al final de la cola. No devuelve nada.
-    - dequeue() -> item|None: Extrae y devuelve el primer elemento de la cola.
-      Devuelve None si la cola está vacía.
-    - is_empty() -> bool: True si la cola está vacía.
-    - __len__() -> int: Número de elementos en la cola.
-    - to_list() -> list: Copia de la lista interna de elementos.
-    - guardar_en_archivo(ruta_archivo): Guarda la cola en un archivo JSON.
-    - cargar_desde_archivo(ruta_archivo): Carga la cola desde un archivo JSON.
+    Methods:
+    - enqueue(item): Add item to the end of the queue.
+    - dequeue() -> item|None: Remove and return the first element; None if empty.
+    - is_empty() -> bool: True if the queue is empty.
+    - __len__() -> int: Number of elements in the queue.
+    - to_list() -> list: Copy of internal elements.
+    - guardar_en_archivo(ruta_archivo): Save the queue to a JSON file.
+    - cargar_desde_archivo(ruta_archivo): Load the queue from a JSON file.
     """
-    # Constructor: inicia la cola vacía
+    # Constructor: start empty queue
     def __init__(self):
         self._items = []
 
-    # Encola: añade al final de la cola
+    # Enqueue: add to queue tail
     def enqueue(self, item):
-        """Añade un elemento al final de la cola.
+        """Add an element to the end of the queue.
 
-        Parámetros:
-        - item: cualquier objeto que se quiera encolar.
+        Parameters:
+        - item: any object to be enqueued.
 
-        Retorna:
-        - None (efecto lateral: modifica la cola).
+        Returns:
+        - None (side effect: modifies the queue).
         """
         self._items.append(item)
 
-    # Desencola: extrae y devuelve el primero
+    # Dequeue: remove and return the first element
     def dequeue(self):
-        """Extrae el primer elemento de la cola.
+        """Remove the first element of the queue.
 
-        Retorna:
-        - El primer elemento encolado o None si la cola está vacía.
+        Returns:
+        - The first enqueued element or None if the queue is empty.
         """
         if self.is_empty():
             return None
         return self._items.pop(0)
 
-    # Indica si no hay elementos en la cola
+    # Indicates if the queue has no elements
     def is_empty(self) -> bool:
-        """Indica si la cola está vacía.
+        """Indicate whether the queue is empty.
 
-        Retorna:
-        - True si no hay elementos, False en caso contrario.
+        Returns:
+        - True if there are no elements, False otherwise.
         """
         return len(self._items) == 0
 
-    # Tamaño actual de la cola
+    # Current queue size
     def __len__(self):
-        """Número de elementos en la cola."""
+        """Number of elements in the queue."""
         return len(self._items)
 
-    # Copia superficial de los elementos (no referencia original)
+    # Shallow copy of elements (not original reference)
     def to_list(self):
-        """Devuelve una copia de la lista interna (no la referencia).
+        """Return a copy of the internal list (not a reference).
 
-        Útil para inspección o serialización sin modificar la cola.
+        Useful for inspection or serialization without modifying the queue.
         """
         return list(self._items)
     
-    # Consulta el primer elemento sin quitarlo
+    # Peek: view first element without removing it
     def peek(self):
-        """Devuelve el primer elemento de la cola sin quitarlo.
+        """Return the first element without removing it.
         
-        Retorna:
-        - El primer elemento de la cola o None si está vacía.
+        Returns:
+        - The first element of the queue or None if it's empty.
         """
         if self.is_empty():
             return None
         return self._items[0]
 
-    # Serializa la cola a un archivo JSON
+    # Serialize the queue to a JSON file
     def guardar_en_archivo(self, ruta_archivo):
-        """Guarda la cola en un archivo JSON.
+        """Save the queue to a JSON file.
         
-        Parámetros:
-        - ruta_archivo: str, ruta donde guardar el archivo (ej: 'data/reservas.json')
+        Parameters:
+        - ruta_archivo: str, path where to save the file (e.g., 'data/reservas.json')
         
-        Retorna:
+        Returns:
         - None
         
-        Ejemplo de uso:
+        Example:
         >>> cola = Cola()
-        >>> cola.enqueue({"isbn": "123", "usuario": "Juan"})
+        >>> cola.enqueue({"isbn": "123", "usuario": "John"})
         >>> cola.guardar_en_archivo("data/reservas.json")
         """
         try:
-            # Crear el directorio si no existe
+            # Create directory if it doesn't exist
             directorio = os.path.dirname(ruta_archivo)
             if directorio and not os.path.exists(directorio):
                 os.makedirs(directorio)
             
-            # Guardar la cola en formato JSON
+            # Save queue in JSON format
             with open(ruta_archivo, 'w', encoding='utf-8') as f:
                 json.dump(self._items, f, indent=2, ensure_ascii=False)
             
-            print(f"Cola guardada exitosamente en {ruta_archivo}")
+            print(f"Queue saved successfully to {ruta_archivo}")
         except Exception as e:
-            print(f"Error al guardar la cola: {e}")
+            print(f"Error saving queue: {e}")
 
-    # Carga la cola desde un archivo JSON existente
+    # Load the queue from an existing JSON file
     def cargar_desde_archivo(self, ruta_archivo):
-        """Carga la cola desde un archivo JSON.
+        """Load the queue from a JSON file.
         
-        Parámetros:
-        - ruta_archivo: str, ruta del archivo a cargar
+        Parameters:
+        - ruta_archivo: str, path of the file to load
         
-        Retorna:
-        - None (modifica el estado interno de la cola)
+        Returns:
+        - None (modifies internal queue state)
         
-        Nota: Si el archivo no existe, la cola permanece vacía.
+        Note: If the file does not exist, the queue remains empty.
         
-        Ejemplo de uso:
+        Example:
         >>> cola = Cola()
         >>> cola.cargar_desde_archivo("data/reservas.json")
         """
         try:
             if not os.path.exists(ruta_archivo):
-                print(f"Archivo {ruta_archivo} no encontrado. Iniciando con cola vacía.")
+                print(f"File {ruta_archivo} not found. Starting with an empty queue.")
                 self._items = []
                 return
             
             with open(ruta_archivo, 'r', encoding='utf-8') as f:
                 self._items = json.load(f)
             
-            print(f"Cola cargada exitosamente desde {ruta_archivo}. Elementos: {len(self._items)}")
+            print(f"Queue loaded successfully from {ruta_archivo}. Elements: {len(self._items)}")
         except json.JSONDecodeError as e:
-            print(f"Error al decodificar JSON: {e}. Iniciando con cola vacía.")
+            print(f"Error decoding JSON: {e}. Starting with an empty queue.")
             self._items = []
         except Exception as e:
-            print(f"Error al cargar la cola: {e}")
+            print(f"Error loading queue: {e}")
             self._items = []
 
-    # Vacía todos los elementos de la cola
+    # Clear all queue elements
     def limpiar(self):
-        """Vacía completamente la cola.
+        """Completely clear the queue.
         
-        Retorna:
+        Returns:
         - None
         """
         self._items = []
     
     def __repr__(self):
-        """Representación de la cola para debugging."""
-        return f"Cola({len(self._items)} elementos)"
+        """Queue representation for debugging."""
+        return f"Queue({len(self._items)} elements)"
     
     def __str__(self):
-        """Representación legible de la cola."""
+        """Human-readable queue representation."""
         if self.is_empty():
-            return "Cola vacía"
-        return f"Cola con {len(self._items)} elementos: {self._items[:3]}{'...' if len(self._items) > 3 else ''}"
+            return "Empty queue"
+        return f"Queue with {len(self._items)} elements: {self._items[:3]}{'...' if len(self._items) > 3 else ''}"

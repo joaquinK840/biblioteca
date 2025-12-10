@@ -11,16 +11,16 @@ from app.utils.structures.cola import Cola
 CSV_PATH = "app/db/data/reservas.csv"
 
 
-# Servicio de reservas: CRUD y asignación automática (FIFO)
+# Reservation service: CRUD and automatic assignment (FIFO)
 class ReservaService:
 
     @staticmethod
-    # Crea el CSV si no existe (cabecera incluida)
+    # Create the CSV if it doesn't exist (with header)
     def _ensure_file_exists():
-        """Crear el archivo CSV de reservas si no existe.
+        """Create the reservations CSV file if it does not exist.
 
-        Parámetros: ninguno.
-        Retorna: None (efecto lateral: crea archivo).
+        Parameters: none.
+        Returns: None (side effect: creates file).
         """
         if not os.path.exists(CSV_PATH):
             with open(CSV_PATH, mode="w", encoding="utf-8", newline="") as file:
@@ -28,12 +28,12 @@ class ReservaService:
                 writer.writerow(["reserva_id", "user_id", "isbn", "fecha_reserva"])
 
     @staticmethod
-    # Lee todas las reservas del CSV y retorna la lista
+    # Read all reservations from CSV and return the list
     def cargar_reservas() -> List[Reserva]:
-        """Leer todas las reservas desde CSV y devolver lista de Reserva.
+        """Read all reservations from CSV and return a list of Reserva.
 
-        Parámetros: ninguno.
-        Retorna: List[Reserva].
+        Parameters: none.
+        Returns: List[Reserva].
         """
         ReservaService._ensure_file_exists()
         reservas: List[Reserva] = []
@@ -51,13 +51,13 @@ class ReservaService:
         return reservas
 
     @staticmethod
-    # Sobrescribe el CSV con la lista de reservas proporcionada
+    # Overwrite the CSV with the provided reservations list
     def guardar_reservas(reservas: List[Reserva]):
-        """Guardar la lista completa de reservas en el CSV (sobrescribe).
+        """Save the complete reservations list to the CSV (overwrites).
 
-        Parámetros:
+        Parameters:
         - reservas: List[Reserva]
-        Retorna: None (efecto lateral: escribe archivo).
+        Returns: None (side effect: writes file).
         """
         with open(CSV_PATH, mode="w", encoding="utf-8", newline="") as file:
             fieldnames = ["reserva_id", "user_id", "isbn", "fecha_reserva"]
@@ -67,13 +67,13 @@ class ReservaService:
                 writer.writerow(r.__dict__)
 
     @staticmethod
-    # Genera un ID secuencial nuevo basado en las reservas existentes
+    # Generate a new sequential ID based on existing reservations
     def _generar_id(reservas: List[Reserva]) -> str:
-        """Generar un nuevo id secuencial para reservas.
+        """Generate a new sequential id for reservations.
 
-        Parámetros:
-        - reservas: lista actual de Reserva
-        Retorna: nuevo id como str.
+        Parameters:
+        - reservas: current list of Reserva
+        Returns: new id as str.
         """
         if not reservas:
             return "1"
@@ -83,19 +83,19 @@ class ReservaService:
     # CRUD básico
 
     @staticmethod
-    # Devuelve todas las reservas
+    # Return all reservations
     def listar() -> List[Reserva]:
-        """Devolver todas las reservas."""
+        """Return all reservations."""
         return ReservaService.cargar_reservas()
 
     @staticmethod
-    # Busca una reserva por su ID, o None si no existe
+    # Find a reservation by ID, or None if it doesn't exist
     def obtener_por_id(reserva_id: str) -> Optional[Reserva]:
-        """Buscar reserva por reserva_id.
+        """Find reservation by reserva_id.
 
-        Parámetros:
+        Parameters:
         - reserva_id: str
-        Retorna: Reserva o None.
+        Returns: Reserva or None.
         """
         for r in ReservaService.cargar_reservas():
             if r.reserva_id == reserva_id:
@@ -103,15 +103,15 @@ class ReservaService:
         return None
 
     @staticmethod
-    # Crea una reserva solo si usuario/libro existen y no hay stock
+    # Create a reservation only if user/book exist and stock is zero
     def crear(user_id: str, isbn: str) -> Optional[Reserva]:
-        """Crear una nueva reserva solo si el usuario y el libro existen y no hay stock.
+        """Create a new reservation only if the user and book exist and there is no stock.
 
-        Parámetros:
+        Parameters:
         - user_id: str
         - isbn: str
-        Retorna: Reserva creada o None si la creación no es válida.
-        Efectos: escribe en CSV.
+        Returns: Created Reserva or None if creation is not valid.
+        Effects: writes to CSV.
         """
         # Validar usuario
         if not UsuarioService.obtener_por_id(user_id):
@@ -122,7 +122,7 @@ class ReservaService:
         if not libro:
             return None
 
-        # Solo permitir reserva si el stock es 0 
+        # Only allow reservation if stock is 0 
         if libro.stock > 0:
             return None
 
@@ -141,13 +141,13 @@ class ReservaService:
         return nueva
 
     @staticmethod
-    # Elimina una reserva por ID; True si la borró
+    # Delete a reservation by ID; True if removed
     def eliminar(reserva_id: str) -> bool:
-        """Eliminar una reserva por id.
+        """Delete a reservation by id.
 
-        Parámetros:
+        Parameters:
         - reserva_id: str
-        Retorna: True si se eliminó, False si no existe.
+        Returns: True if deleted, False if it does not exist.
         """
         reservas = ReservaService.cargar_reservas()
         nuevas = [r for r in reservas if r.reserva_id != reserva_id]
@@ -156,38 +156,38 @@ class ReservaService:
         ReservaService.guardar_reservas(nuevas)
         return True
 
-    # 🔹 Cola de reservas por libro (FIFO), requisito del proyecto
+    # 🔹 Reservations queue per book (FIFO), project requirement
 
     @staticmethod
-    # Construye una Cola FIFO con las reservas de un libro
+    # Build a FIFO Queue with reservations for a given book
     def cola_por_libro(isbn: str) -> Cola:
-        """Construir y devolver una Cola (FIFO) con reservas del libro dado.
+        """Build and return a Queue (FIFO) with reservations for the given book.
 
-        Parámetros:
+        Parameters:
         - isbn: str
-        Retorna: Cola con objetos Reserva en orden de llegada.
+        Returns: Queue with Reserva objects in arrival order.
         """
         reservas = ReservaService.cargar_reservas()
         cola = Cola()
         reservas_libro = [r for r in reservas if r.isbn == isbn]
-        # el orden en el CSV ya es el orden de llegada
+        # the order in the CSV is already the arrival order
         for r in reservas_libro:
             cola.enqueue(r)
         return cola
 
     @staticmethod
-    # Asigna la siguiente reserva al devolver un libro (FIFO)
+    # Assign the next reservation when a book is returned (FIFO)
     def asignar_siguiente_reserva(isbn: str):
-        """Asignar la siguiente reserva pendiente al devolver un libro.
+        """Assign the next pending reservation when a book is returned.
 
-        Parámetros:
+        Parameters:
         - isbn: str
-        Retorna: Reserva asignada o None si no hay reservas.
-        Efectos:
-        - elimina la reserva del CSV y crea automáticamente un préstamo para ese usuario.
+        Returns: Assigned Reserva or None if there are no reservations.
+        Effects:
+        - removes the reservation from CSV and automatically creates a loan for that user.
         """
-        # Nota: import local intencional para evitar dependencia circular
-        # entre ReservaService y PrestamoService.
+        # Note: intentional local import to avoid circular dependency
+        # between ReservaService and PrestamoService.
         from app.services.prestamo_service import PrestamoService
 
         reservas = ReservaService.cargar_reservas()
@@ -196,15 +196,15 @@ class ReservaService:
         if not reservas_libro:
             return None
 
-        # FIFO: tomamos la reserva más antigua
+        # FIFO: take the oldest reservation
         reservas_libro.sort(key=lambda r: r.fecha_reserva)
         siguiente = reservas_libro[0]
 
-        # Eliminarla del archivo
+        # Remove it from the file
         nuevas = [r for r in reservas if r.reserva_id != siguiente.reserva_id]
         ReservaService.guardar_reservas(nuevas)
 
-        # Crear préstamo automáticamente para el usuario de la reserva
+        # Automatically create a loan for the reservation's user
         PrestamoService.crear(siguiente.user_id, isbn)
 
         return siguiente

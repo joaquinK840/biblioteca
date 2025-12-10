@@ -2,11 +2,11 @@ from fastapi import HTTPException
 from app.services.libro_service import LibroService
 from app.algorithms.estanterias import combinaciones_peligrosas, estanteria_optima
 
-# Controlador del módulo estanterías: fuerza bruta y backtracking
+# Shelves controller: brute force and backtracking
 class EstanteriaController:
 
     @staticmethod
-    # Devuelve combinaciones de 4 libros con peso > 8 kg (fuerza bruta)
+    # Return combinations of 4 books with weight > 8 kg (brute force)
     def estanteria_deficiente():
         libros = LibroService.cargar_libros()
 
@@ -38,7 +38,7 @@ class EstanteriaController:
         }
 
     @staticmethod
-    # Devuelve la combinación óptima por valor sin exceder 8 kg (backtracking)
+    # Return the optimal value combination without exceeding 8 kg (backtracking)
     def estanteria_optima():
         libros = LibroService.cargar_libros()
 

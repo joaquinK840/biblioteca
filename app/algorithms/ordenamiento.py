@@ -1,5 +1,5 @@
-# Algoritmo de Inserción (ya lo tienes)
+# Insertion Algorithm (already implemented)
 from app.utils.librosOrdenados import libros_ordenados_isbn
 
-# Merge Sort (ya lo tienes)
+# Merge Sort (already implemented)
 from app.utils.libroSort import ordenar_libros_por_precio

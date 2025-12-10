@@ -5,20 +5,20 @@ router = APIRouter(prefix="/estanteria", tags=["Estanterías"])
 
 @router.get("/deficiente")
 def estanteria_deficiente():
-    """Combinaciones de 4 libros > 8 kg (fuerza bruta)"""
+    """Combinations of 4 books > 8 kg (brute force)"""
     """
-    Algoritmo de fuerza bruta:
-    - Todas las combinaciones de 4 libros cuyo peso > 8kg
+    Brute force algorithm:
+    - All combinations of 4 books whose weight > 8 kg
     """
     return EstanteriaController.estanteria_deficiente()
 
 
 @router.get("/optima")
 def estanteria_optima():
-    """Mejor combinación por valor sin exceder 8 kg (backtracking)"""
+    """Best value combination without exceeding 8 kg (backtracking)"""
     """
-    Algoritmo de backtracking:
-    - Combina libros para maximizar el valor total
-    - Sin exceder peso de 8kg
+    Backtracking algorithm:
+    - Combine books to maximize total value
+    - Without exceeding 8 kg
     """
     return EstanteriaController.estanteria_optima()

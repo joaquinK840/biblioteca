@@ -3,13 +3,13 @@ from typing import List
 
 class Inventario:
     """
-    Maneja:
-    - Inventario General (desordenado)
-    - Inventario Ordenado por ISBN (siempre ordenado con Inserción)
+    Manages:
+    - General Inventory (unsorted)
+    - Inventory Ordered by ISBN (always ordered via Insertion)
 
-    Requisito del proyecto:
-    - Lista desordenada para búsquedas lineales
-    - Lista ordenada para búsquedas binarias
+    Project requirement:
+    - Unsorted list for linear searches
+    - Sorted list for binary searches
     """
 
     def __init__(self):
@@ -17,17 +17,17 @@ class Inventario:
         self.inventario_ordenado: List[Libro] = []
 
     # ---------------------------
-    # AGREGAR LIBRO
+    # ADD BOOK
     # ---------------------------
     def agregar_libro(self, libro: Libro):
-        # 1. Lista general → solo agregar
+        # 1. General list → just append
         self.inventario_general.append(libro)
 
-        # 2. Lista ordenada → insertar con inserción
+        # 2. Sorted list → insert via insertion
         self._insertar_ordenado_isbn(libro)
 
     # ---------------------------
-    # INSERCIÓN ORDENADA POR ISBN (O(n))
+    # ORDERED INSERTION BY ISBN (O(n))
     # ---------------------------
     def _insertar_ordenado_isbn(self, libro: Libro):
         i = 0
@@ -37,7 +37,7 @@ class Inventario:
         self.inventario_ordenado.insert(i, libro)
 
     # ---------------------------
-    # BUSQUEDA LINEAL POR TÍTULO O AUTOR
+    # LINEAR SEARCH BY TITLE OR AUTHOR
     # ---------------------------
     def buscar_lineal(self, texto: str) -> List[Libro]:
         texto = texto.lower()
@@ -47,7 +47,7 @@ class Inventario:
         ]
 
     # ---------------------------
-    # BUSQUEDA BINARIA POR ISBN
+    # BINARY SEARCH BY ISBN
     # ---------------------------
     def buscar_binaria(self, isbn: str):
         low = 0
@@ -64,7 +64,7 @@ class Inventario:
         return None
 
     # ---------------------------
-    # PARA REPORTE GLOBAL CON MERGE SORT
+    # FOR GLOBAL REPORT WITH MERGE SORT
     # ---------------------------
     def get_libros_para_ordenar_por_valor(self):
         return list(self.inventario_general)

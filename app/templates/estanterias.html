@@ -2,9 +2,9 @@
 <html lang="es">
   <head>
     <!-- ============================================
-         BIBLIOTECA - Módulo de Estanterías
-         Algoritmos: Fuerza Bruta y Backtracking
-         ============================================ -->
+          LIBRARY - Shelves Module
+          Algorithms: Brute Force and Backtracking
+          ============================================ -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Estanterías - Biblioteca</title>
@@ -18,7 +18,7 @@
       <p>Algoritmos de asignación: Fuerza Bruta y Backtracking</p>
     </header>
 
-    <!-- ========== NAVEGACIÓN ========== -->
+    <!-- ========== NAVIGATION ========== -->
     <nav>
       <a href="/">🏠 Inicio</a>
       <a href="/templates/libros">📖 Libros</a>
@@ -28,9 +28,9 @@
       <a href="/templates/estanterias" class="active">📚 Estanterías</a>
     </nav>
 
-    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <!-- ========== MAIN CONTENT ========== -->
     <div class="container">
-      <!-- ===== SECCIÓN: Fuerza Bruta ===== -->
+      <!-- ===== SECTION: Brute Force ===== -->
       <div class="section fade-in">
         <h2>⚠️ Fuerza Bruta – Combinaciones Peligrosas</h2>
         <p>
@@ -52,14 +52,14 @@
           </button>
         </div>
 
-        <!-- Resultado: total de combinaciones -->
+        <!-- Result: total combinations -->
         <div
           id="resultado-fb"
           class="alert alert-info"
           style="display: none"
         ></div>
 
-        <!-- Tabla de combinaciones peligrosas -->
+        <!-- Table of dangerous combinations -->
         <div class="table-container">
           <table>
             <thead>
@@ -79,7 +79,7 @@
         <div id="loading-fb" class="loading">Procesando combinaciones...</div>
       </div>
 
-      <!-- ===== SECCIÓN: Backtracking ===== -->
+      <!-- ===== SECTION: Backtracking ===== -->
       <div class="section fade-in">
         <h2>✅ Backtracking – Estantería Óptima</h2>
         <p>
@@ -101,14 +101,14 @@
           </button>
         </div>
 
-        <!-- Resultado: mejor valor encontrado -->
+        <!-- Result: best value found -->
         <div
           id="resultado-bt"
           class="alert alert-success"
           style="display: none"
         ></div>
 
-        <!-- Tabla de estanterías óptimas -->
+        <!-- Table of optimal shelves -->
         <div class="table-container">
           <table>
             <thead>
@@ -128,7 +128,7 @@
         <div id="loading-bt" class="loading">Calculando solución óptima...</div>
       </div>
 
-      <!-- ===== SECCIÓN: Explicación de Algoritmos ===== -->
+      <!-- ===== SECTION: Algorithms Explanation ===== -->
       <div class="section fade-in">
         <h2>📖 Explicación de los Algoritmos</h2>
 
@@ -161,13 +161,13 @@
 
     <!-- ========== SCRIPTS ========== -->
     <script>
-      // URL base de la API
+      // API base URL
       const API_BASE = "http://127.0.0.1:8000";
 
       /**
-       * Ejecutar algoritmo de Fuerza Bruta
-       * Usa: GET /estanteria/deficiente
-       * Retorna: Todas las combinaciones de 4 libros que superan 8 Kg
+       * Run Brute Force algorithm
+       * Uses: GET /estanteria/deficiente
+       * Returns: All 4-book combinations that exceed 8 kg
        */
       async function fuerzaBruta() {
         mostrarLoading("loading-fb", true);
@@ -199,9 +199,9 @@
       }
 
       /**
-       * Ejecutar algoritmo de Backtracking
-       * Usa: GET /estanteria/optima
-       * Retorna: Asignación óptima de libros a estanterías
+       * Run Backtracking algorithm
+       * Uses: GET /estanteria/optima
+       * Returns: Optimal assignment of books to shelves
        */
       async function backtracking() {
         mostrarLoading("loading-bt", true);
@@ -230,10 +230,10 @@
         mostrarLoading("loading-bt", false);
       }
 
-      // ========== FUNCIONES AUXILIARES ==========
+      // ========== HELPER FUNCTIONS ==========
 
       /**
-       * Renderiza la tabla de combinaciones peligrosas (Fuerza Bruta)
+       * Render table of dangerous combinations (Brute Force)
        */
       function renderTablaFuerzaBruta(datos) {
         const tabla = document.getElementById("tabla-fb");
@@ -265,7 +265,7 @@
       }
 
       /**
-       * Renderiza la tabla de estanterías óptimas (Backtracking)
+       * Render table of optimal shelves (Backtracking)
        */
       function renderTablaBacktracking(datos) {
         const tabla = document.getElementById("tabla-bt");

@@ -1,31 +1,31 @@
 
-# Selección óptima de libros por estantería (backtracking con poda)
+# Optimal shelf selection (backtracking with pruning)
 def estanteria_backtracking(libros, peso_max=8.0):
-    """Algoritmo de backtracking para asignar estanterías optimizando valor sin superar peso.
+        """Backtracking algorithm to assign shelves maximizing value without exceeding weight.
 
-Función:
+Function:
 - estanteria_backtracking(libros, peso_max=8.0)
-  - Recibe:
-    * libros: lista de objetos con atributos al menos 'titulo', 'peso', 'valor'.
-    * peso_max: límite de peso por estantería (float).
-  - Devuelve:
-    * dict {"resultado": [ { "estanteria": int, "libros": [titulos], "peso_total": float, "precio_total": float }, ... ] }
-  - Efectos secundarios:
-    * Añade/establece el atributo `estanteria` en cada objeto libro para indicar la estantería asignada (0 = sin asignar).
-  - Nota:
-    * Intenta empaquetar libros en estanterías maximizando valor sin exceder `peso_max`, con hasta 4 libros por estantería.
+    - Receives:
+        * libros: list of objects with at least 'titulo', 'peso', 'valor'.
+        * peso_max: weight limit per shelf (float).
+    - Returns:
+        * dict {"resultado": [ { "estanteria": int, "libros": [titles], "peso_total": float, "precio_total": float }, ... ] }
+    - Side effects:
+        * Adds/sets attribute `estanteria` on each book object to indicate assigned shelf (0 = unassigned).
+    - Note:
+        * Attempts to pack books into shelves maximizing value without exceeding `peso_max`, with up to 4 books per shelf.
 """
-    # Paso 1: inicializar todos los libros sin estantería
+    # Step 1: initialize all books with no shelf assigned
     for libro in libros:
         setattr(libro, "estanteria", 0)
 
-    # Paso 2: estimar cuántas estanterías se necesitarán (máx 4 por est.)
+    # Step 2: estimate number of shelves needed (max 4 per shelf)
     total_libros = len(libros)
     num_estanterias = (total_libros // 4) + 1
 
     resultado_final = []
 
-    # Paso 3: iterar por cada estantería y resolver con backtracking
+    # Step 3: iterate over shelves and solve via backtracking
     for num_est in range(1, num_estanterias + 1):
         # Filtrar solo libros sin estantería asignada
         disponibles = [l for l in libros if l.estanteria == 0]
@@ -40,15 +40,15 @@ Función:
 
         n = len(disponibles)
 
-        # Backtracking: decide por libro tomarlo o no, con restricciones
+        # Backtracking: decide per book to take it or not, with constraints
         def backtrack(indice, peso_actual, valor_actual, seleccion):
             nonlocal mejor_valor, mejor_comb
 
-            # Poda: no más de 4 libros por estantería
+            # Prune: no more than 4 books per shelf
             if len(seleccion) > 4:
                 return
 
-            # Poda: no exceder el peso máximo
+            # Prune: do not exceed max weight
             if peso_actual > peso_max:
                 return
 
@@ -61,7 +61,7 @@ Función:
 
             libro = disponibles[indice]
 
-            # Opción 1: tomar el libro si cabe en peso
+            # Option 1: take the book if it fits weight
             if peso_actual + float(libro.peso) <= peso_max:
                 seleccion.append(libro)
                 backtrack(
@@ -72,21 +72,21 @@ Función:
                 )
                 seleccion.pop()
 
-            # Opción 2: no tomar el libro y continuar
+            # Option 2: skip the book and continue
             backtrack(indice + 1, peso_actual, valor_actual, seleccion)
 
-        # Ejecutar la búsqueda para esta estantería
+        # Run the search for this shelf
         backtrack(0, 0, 0, [])
 
-        # Si no se encuentra combinación válida, terminar
+        # If no valid combination found, stop
         if not mejor_comb:
             break
 
-        # Asignar número de estantería a la mejor combinación
+        # Assign shelf number to best combination
         for libro in mejor_comb:
             libro.estanteria = num_est
 
-        # Guardar el resultado estructurado para la respuesta
+        # Persist structured result for the response
         resultado_final.append({
             "estanteria": num_est,
             "libros": [l.titulo for l in mejor_comb],

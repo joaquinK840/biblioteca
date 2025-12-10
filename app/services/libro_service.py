@@ -15,16 +15,16 @@ from app.utils.libros.inventario import Inventario
 
 CSV_PATH = "app/db/data/libros.csv"
 
-# Servicio de libros: lectura CSV, CRUD y utilidades/algoritmos
+# Book service: CSV IO, CRUD, and utilities/algorithms
 class LibroService:
 
     @staticmethod
-    # Lee todos los libros del CSV y retorna la lista
+    # Read all books from CSV and return the list
     def cargar_libros() -> List[Libro]:
-        """Leer todos los libros desde el CSV y devolver una lista de Libro.
+        """Read all books from the CSV and return a list of `Libro`.
 
-        Parámetros: ninguno.
-        Retorna: List[Libro] (puede estar vacía).
+        Parameters: none.
+        Returns: List[Libro] (may be empty).
         """
         libros = []
         with open(CSV_PATH, mode="r", encoding="utf-8") as file:
@@ -34,13 +34,13 @@ class LibroService:
         return libros
 
     @staticmethod
-    # Sobrescribe el CSV con la lista proporcionada
+    # Overwrite the CSV with the provided list
     def guardar_libros(libros: List[Libro]):
-        """Sobrescribir el CSV con la lista de libros dada.
+        """Overwrite the CSV with the provided list of books.
 
-        Parámetros:
-        - libros: List[Libro] a guardar.
-        Retorna: None (efecto lateral: escribe archivo).
+        Parameters:
+        - libros: List[Libro] to persist.
+        Returns: None (side effect: writes file).
         """
         with open(CSV_PATH, mode="w", encoding="utf-8", newline="") as file:
             fieldnames = ["isbn", "titulo", "autor", "peso", "valor", "stock", "paginas", "editorial", "idioma"]
@@ -50,13 +50,13 @@ class LibroService:
                 writer.writerow(libro.__dict__)
 
     @staticmethod
-    # Busca un libro por su ISBN, o None si no existe
+    # Find a book by its ISBN, or None if it doesn't exist
     def obtener_por_isbn(isbn: str) -> Optional[Libro]:
-        """Buscar un libro por su ISBN.
+        """Find a book by its ISBN.
 
-        Parámetros:
+        Parameters:
         - isbn: str
-        Retorna: Libro si existe, otherwise None.
+        Returns: Libro if found, otherwise None.
         """
         for libro in LibroService.cargar_libros():
             if libro.isbn == isbn:
@@ -64,17 +64,17 @@ class LibroService:
         return None
 
     @staticmethod
-    # Crea un libro si no hay duplicado de ISBN
+    # Create a book if there's no duplicate ISBN
     def crear(libro: Libro):
-        """Crear un nuevo libro si no existe otro con el mismo ISBN.
+        """Create a new book if there is no other with the same ISBN.
 
-        Parámetros:
-        - libro: instancia Libro a crear.
-        Retorna: Libro creado o None si ya existe duplicado.
+        Parameters:
+        - libro: Libro instance to create.
+        Returns: Created Libro or None if a duplicate already exists.
         """
         libros = LibroService.cargar_libros()
 
-        # evitar duplicados
+        # avoid duplicates
         if any(l.isbn == libro.isbn for l in libros):
             return None
 
@@ -83,14 +83,14 @@ class LibroService:
         return libro
 
     @staticmethod
-    # Actualiza el libro con ese ISBN usando los datos dados
+    # Update the book with that ISBN using provided data
     def actualizar(isbn: str, data: Libro):
-        """Actualizar los datos de un libro identificado por ISBN.
+        """Update the data of a book identified by ISBN.
 
-        Parámetros:
-        - isbn: str del libro a actualizar.
-        - data: instancia Libro con nuevos datos.
-        Retorna: Libro actualizado o None si no existe.
+        Parameters:
+        - isbn: str of the book to update.
+        - data: Libro instance with new data.
+        Returns: Updated Libro or None if it does not exist.
         """
         libros = LibroService.cargar_libros()
         for i, l in enumerate(libros):
@@ -101,13 +101,13 @@ class LibroService:
         return None
 
     @staticmethod
-    # Elimina por ISBN; retorna True si lo encontró y borró
+    # Delete by ISBN; returns True if found and removed
     def eliminar(isbn: str):
-        """Eliminar un libro por ISBN.
+        """Delete a book by ISBN.
 
-        Parámetros:
+        Parameters:
         - isbn: str
-        Retorna: True si se eliminó, False si no se encontró.
+        Returns: True if deleted, False if not found.
         """
         libros = LibroService.cargar_libros()
         nuevos = [l for l in libros if l.isbn != isbn]
@@ -117,40 +117,40 @@ class LibroService:
         return True
 
     @staticmethod
-    # Devuelve la lista ordenada por ISBN (insertion sort)
+    # Return the list ordered by ISBN (Insertion Sort)
     def ordernar_por_isbn() -> List[Libro]:
-        """Devolver lista de libros ordenada por ISBN (insertion sort).
+        """Return list of books sorted by ISBN (insertion sort).
 
-        Parámetros: ninguno.
-        Retorna: List[Libro] ordenada ascendentemente por ISBN.
+        Parameters: none.
+        Returns: List[Libro] sorted ascending by ISBN.
         """
         libros = LibroService.cargar_libros()
         ordedanados = libros_ordenados_isbn(libros)
         return ordedanados
     
     @staticmethod
-    # Devuelve la lista ordenada por precio/valor (merge sort)
+    # Return the list ordered by price/value (Merge Sort)
     def obtener_por_precio():
-        """Devolver lista de libros ordenada por precio/valor (merge sort).
+        """Return list of books sorted by price/value (merge sort).
 
-        Parámetros: ninguno.
-        Retorna: lista ordenada por atributo `valor`.
+        Parameters: none.
+        Returns: list sorted by attribute `valor`.
         """
         libros= LibroService.cargar_libros()
         ordenados=ordenar_libros_por_precio(libros)
         return ordenados
 
     @staticmethod
-    # Búsqueda lineal por título/autor en inventario general
+    # Linear search by title/author in general inventory
     def buscar_lineal(texto: str) -> List[Libro]:
-        """Buscar por título o autor sobre el inventario general (lista desordenada).
+        """Search by title or author over the general inventory (unsorted list).
 
-        Parámetros:
-        - texto: str a buscar (case-insensitive) en título o autor.
-        Retorna:
-        - List[Libro] con coincidencias.
+        Parameters:
+        - texto: str to search (case-insensitive) in title or author.
+        Returns:
+        - List[Libro] with matches.
         """
-        # Cargar inventario y realizar búsqueda lineal
+        # Load inventory and perform linear search
         
 
         inventario = Inventario()
@@ -160,12 +160,12 @@ class LibroService:
         return inventario.buscar_lineal(texto)
     
     @staticmethod
-    # Detecta combinaciones deficientes por fuerza bruta (peso>8)
+    # Detect deficient combinations via brute force (weight > 8)
     def estanteria_deficiente():
-        """Detectar combinaciones deficientes por fuerza bruta (peso>8).
+        """Detect deficient combinations via brute force (weight > 8).
 
-        Parámetros: ninguno.
-        Retorna: lista de diccionarios con combinaciones que superan el umbral.
+        Parameters: none.
+        Returns: list of dictionaries with combinations that exceed the threshold.
         """
         libros = LibroService.cargar_libros()
         deficientes = estanterias_fuerzaBruta(libros)
@@ -174,25 +174,25 @@ class LibroService:
 
 
     @staticmethod
-    # Calcula estanterías óptimas (backtracking) y adapta al schema
+    # Compute optimal shelves (backtracking) and adapt to schema
     def estanteria_optima():
-        """Calcular estanterías óptimas mediante backtracking y adaptar el resultado.
+        """Compute optimal shelves via backtracking and adapt the result.
 
-        Parámetros: ninguno.
-        Retorna: EstanteriasOptimasResponse (schema) con la asignación óptima.
+        Parameters: none.
+        Returns: EstanteriasOptimasResponse (schema) with the optimal assignment.
         """
         libros = LibroService.cargar_libros()
         salida = estanteria_backtracking(libros)
         return adaptar_estanterias_optimas(salida)
     
     @staticmethod
-    # Suma de valor de libros de un autor (recursión tipo pila)
+    # Sum of book values for an author (stack-style recursion)
     def valor_total_por_autor(autor: str):
-        """Calcular el valor total de libros de un autor usando recursión (pila).
+        """Calculate the total value of an author's books using recursion (stack-style).
 
-        Parámetros:
-        - autor: nombre del autor (str).
-        Retorna: dict {'valor_total': float, 'libros': [titulos]} o None si no hay libros.
+        Parameters:
+        - autor: author name (str).
+        Returns: dict {'valor_total': float, 'libros': [titles]} or None if no books.
         """
         libros = [l for l in LibroService.cargar_libros() if l.autor == autor]
         if not libros:
@@ -203,13 +203,13 @@ class LibroService:
 
 
     @staticmethod
-    # Promedio de peso de libros de un autor (tail recursion)
+    # Average weight of books for an author (tail recursion)
     def peso_promedio_por_autor(autor: str):
-        """Calcular el peso promedio de libros de un autor usando recursión tail.
+        """Calculate the average weight of an author's books using tail recursion.
 
-        Parámetros:
+        Parameters:
         - autor: str
-        Retorna: dict {'peso_promedio': float, 'libros': [titulos]} o None si no hay libros.
+        Returns: dict {'peso_promedio': float, 'libros': [titles]} or None if no books.
         """
         libros = [l for l in LibroService.cargar_libros() if l.autor == autor]
         if not libros:

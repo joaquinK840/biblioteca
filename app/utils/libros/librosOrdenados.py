@@ -1,41 +1,38 @@
 
 def libros_ordenados_isbn(libros):
     """
-    Ordenamiento por ISBN usando Insertion Sort.
+    Sorting by ISBN using Insertion Sort.
 
-Función:
+Function:
 - libros_ordenados_isbn(libros)
-  - Recibe:
-    * libros: lista de objetos con atributo `isbn`.
-  - Devuelve:
-    * nueva lista ordenada ascendentemente por `isbn`.
-  - Implementación:
-    * Inserción iterativa construyendo una lista ordenada nueva.
+  - Receives:
+    * libros: list of objects with `isbn` attribute.
+  - Returns:
+    * new list sorted ascending by `isbn`.
+  - Implementation:
+    * Iterative insertion building a new sorted list.
     
-    Ordena la lista de libros por `isbn` usando el algoritmo
-    de Ordenamiento por Inserción (Insertion Sort).
+    Sorts the list of books by `isbn` using the Insertion Sort algorithm.
 
-    La función recibe una lista de objetos `Libro` y devuelve una
-    nueva lista ordenada por `isbn` en orden ascendente. Se usan
-    nombres de variables en español claros para mejorar la lectura.
+    The function receives a list of `Libro` objects and returns a
+    new list sorted by `isbn` in ascending order.
     """
-    # Lista que iremos construyendo ya ordenada
+    # List we will build already sorted
     lista_ordenada = []
 
     for libro_a_insertar in libros:
-        # Convertimos el ISBN a cadena para comparaciones seguras
+        # Convert ISBN to string for safe comparisons
         isbn_a_insertar = str(libro_a_insertar.isbn)
 
-        # Empezamos buscando la posición correcta desde el final
+        # Start by finding the correct position from the end
         indice = len(lista_ordenada) - 1
 
-        # Desplazamos hacia la izquierda mientras el ISBN actual sea
-        # menor que el ISBN del elemento en lista_ordenada
+        # Shift left while current ISBN is less than the ISBN in lista_ordenada
         while indice >= 0 and str(lista_ordenada[indice].isbn) > isbn_a_insertar:
             indice -= 1
             
 
-        # Insertamos el libro en la posición correcta (indice+1)
+        # Insert the book in the correct position (indice+1)
         lista_ordenada.insert(indice + 1, libro_a_insertar)
 
     return lista_ordenada

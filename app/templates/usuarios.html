@@ -2,9 +2,9 @@
 <html lang="es">
   <head>
     <!-- ============================================
-         BIBLIOTECA - Gestión de Usuarios
-         CRUD completo de usuarios
-         ============================================ -->
+          LIBRARY - User Management
+          Full user CRUD
+          ============================================ -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Usuarios - Biblioteca</title>
@@ -18,7 +18,7 @@
       <p>Administración de usuarios del sistema</p>
     </header>
 
-    <!-- ========== NAVEGACIÓN ========== -->
+    <!-- ========== NAVIGATION ========== -->
     <nav>
       <a href="/">🏠 Inicio</a>
       <a href="/templates/libros">📖 Libros</a>
@@ -28,9 +28,9 @@
       <a href="/templates/estanterias">📚 Estanterías</a>
     </nav>
 
-    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <!-- ========== MAIN CONTENT ========== -->
     <div class="container">
-      <!-- ===== SECCIÓN: Lista de Usuarios ===== -->
+      <!-- ===== SECTION: Users List ===== -->
       <div class="section fade-in">
         <h2>📋 Lista de Usuarios</h2>
 
@@ -38,7 +38,7 @@
           <button onclick="cargarUsuarios()">🔄 Cargar Usuarios</button>
         </div>
 
-        <!-- Tabla de usuarios -->
+        <!-- Users table -->
         <div class="table-container">
           <table>
             <thead>
@@ -55,11 +55,11 @@
           </table>
         </div>
 
-        <!-- Indicador de carga -->
+        <!-- Loading indicator -->
         <div id="loading-usuarios" class="loading">Cargando...</div>
       </div>
 
-      <!-- ===== SECCIÓN: Crear Usuario ===== -->
+      <!-- ===== SECTION: Create User ===== -->
       <div class="section fade-in">
         <h2>➕ Crear Nuevo Usuario</h2>
 
@@ -86,12 +86,12 @@
 
     <!-- ========== SCRIPTS ========== -->
     <script>
-      // URL base de la API
+      // API base URL
       const API_BASE = "http://127.0.0.1:8000";
 
       /**
-       * Cargar todos los usuarios desde la API
-       * Usa: GET /usuarios/
+       * Load all users from the API
+       * Uses: GET /usuarios/
        */
       async function cargarUsuarios() {
         mostrarLoading("loading-usuarios", true);
@@ -105,8 +105,8 @@
       }
 
       /**
-       * Crear un nuevo usuario
-       * Usa: POST /usuarios/
+       * Create a new user
+       * Uses: POST /usuarios/
        */
       async function crearUsuario() {
         const data = {
@@ -132,10 +132,10 @@
         }
       }
 
-      // ========== FUNCIONES AUXILIARES ==========
+      // ========== HELPER FUNCTIONS ==========
 
       /**
-       * Renderiza la tabla de usuarios
+       * Render the users table
        */
       function renderTablaUsuarios(usuarios) {
         const tabla = document.getElementById("tabla-usuarios");
@@ -172,7 +172,7 @@
         alert("❌ " + msg);
       }
 
-      // Cargar usuarios al iniciar
+      // Load users on page start
       document.addEventListener("DOMContentLoaded", cargarUsuarios);
     </script>
   </body>

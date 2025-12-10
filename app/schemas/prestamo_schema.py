@@ -2,19 +2,21 @@ from pydantic import BaseModel
 from datetime import date
 
 class PrestamoBase(BaseModel):
+    """Base attributes for a loan request."""
     user_id: str
     isbn: str
 
 class PrestamoCreate(PrestamoBase):
-    # fecha de préstamo se puede calcular en el servicio (hoy)
+    # Loan date can be calculated in the service (today)
     pass
 
 class PrestamoUpdate(BaseModel):
-    # solo se actualizará al registrar devolución
+    # Only updated when registering the return
     fecha_devolucion: date
     devuelto: bool
 
 class PrestamoOut(BaseModel):
+    """Response model for loan details."""
     prestamo_id: str
     user_id: str
     isbn: str

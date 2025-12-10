@@ -1,8 +1,8 @@
-# Clase que representa un usuario del sistema
+# Represents a user in the system
 class Usuario:
-    # Constructor: crea un usuario con datos de contacto
+    # Constructor: creates a user with contact details
     def __init__(self, user_id, nombre, correo, telefono):
-        self.user_id = user_id  # ID único del usuario
-        self.nombre = nombre    # Nombre completo
-        self.correo = correo    # Correo electrónico
-        self.telefono = telefono  # Teléfono de contacto
+        self.user_id = user_id  # Unique user ID
+        self.nombre = nombre    # Full name
+        self.correo = correo    # Email address
+        self.telefono = telefono  # Contact phone

@@ -5,16 +5,16 @@ from app.models.libro2_model import Libro2
 
 
 def convertir_a_libros2(lista_libros):
-    """Conversión de objetos libro a instancias de Libro2.
+    """Convert book-like objects to `Libro2` instances.
 
-Función:
+Function:
 - convertir_a_libros2(lista_libros)
-  - Recibe:
-    * lista_libros: iterable de objetos que contienen atributos: isbn, titulo, autor, peso, valor, stock, paginas, editorial, idioma
-  - Devuelve:
-    * lista de instancias Libro2 con los campos mapeados.
-  - Nota:
-    * No valida tipos; asume que los atributos existen en los objetos de entrada.
+  - Receives:
+    * lista_libros: iterable of objects with attributes: isbn, titulo, autor, peso, valor, stock, paginas, editorial, idioma
+  - Returns:
+    * list of `Libro2` instances with mapped fields.
+  - Note:
+    * Does not validate types; assumes attributes exist on input objects.
 """
     nueva = []
     for l in lista_libros:

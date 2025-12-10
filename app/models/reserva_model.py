@@ -1,6 +1,6 @@
-# Clase que representa una reserva de un libro por un usuario
+# Represents a reservation of a book by a user
 class Reserva:
-    # Constructor: crea una reserva con identificadores y fecha
+    # Constructor: creates a reservation with identifiers and date
     def __init__(
         self,
         reserva_id: str,
@@ -8,7 +8,7 @@ class Reserva:
         isbn: str,
         fecha_reserva: str,
     ):
-        self.reserva_id = reserva_id   # ID único de la reserva
-        self.user_id = user_id         # ID del usuario que reserva
-        self.isbn = isbn               # ISBN del libro reservado
-        self.fecha_reserva = fecha_reserva  # Fecha en que se realiza la reserva
+        self.reserva_id = reserva_id   # Unique reservation ID
+        self.user_id = user_id         # ID of the user reserving
+        self.isbn = isbn               # ISBN of the reserved book
+        self.fecha_reserva = fecha_reserva  # Date the reservation is made

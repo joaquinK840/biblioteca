@@ -1,15 +1,15 @@
 
 def ordenar_libros_por_precio(libros):
-    """Ordenamiento de libros por precio/valor usando merge sort.
+        """Sort books by price/value using merge sort.
 
-Función pública:
+Public function:
 - ordenar_libros_por_precio(libros)
-  - Recibe:
-    * libros: lista de objetos que tienen al menos el atributo `valor` (numérico o convertible a float).
-  - Devuelve:
-    * lista ordenada ascendentemente según el atributo `valor`.
-  - Nota:
-    * No modifica la lista original (se crea y retorna una lista nueva).
+    - Receives:
+        * libros: list of objects with at least attribute `valor` (numeric or convertible to float).
+    - Returns:
+        * list sorted ascending by attribute `valor`.
+    - Note:
+        * Does not modify the original list (creates and returns a new list).
 """
 
     def merge_sort(lista):
@@ -25,7 +25,7 @@ Función pública:
         resultado = []
         i = j = 0
 
-        # Mezclar ordenado por valor (int)
+        # Merge sorted by value (int)
         while i < len(left) and j < len(right):
             if left[i].valor <= right[j].valor:
                 resultado.append(left[i])
@@ -34,7 +34,7 @@ Función pública:
                 resultado.append(right[j])
                 j += 1
 
-        # Agregar lo que sobra
+        # Add remaining items
         while i < len(left):
             resultado.append(left[i])
             i += 1
@@ -45,6 +45,6 @@ Función pública:
 
         return resultado
 
-    # IMPORTANTE: ¡retornar el resultado!
+    # IMPORTANT: return the result!
     lista_ordenada = merge_sort(libros)
     return lista_ordenada

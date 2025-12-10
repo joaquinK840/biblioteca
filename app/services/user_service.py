@@ -6,16 +6,16 @@ from app.models.user_model import Usuario
 
 CSV_PATH = "app/db/data/usuarios.csv"
 
-# Servicio de usuarios: CRUD sobre CSV
+# User service: CSV-based CRUD
 class UsuarioService:
 
     @staticmethod
-    # Crea el CSV si no existe (cabecera incluida)
+    # Create the CSV if it doesn't exist (with header)
     def _ensure_file_exists():
-        """Crear el archivo CSV si no existe.
+        """Create the CSV file if it does not exist.
         
-        Parámetros: ninguno.
-        Retorna: None. (efecto lateral: crea el archivo con cabecera si falta)
+        Parameters: none.
+        Returns: None. (side effect: creates the file with header if missing)
         """
         if not os.path.exists(CSV_PATH):
             with open(CSV_PATH, mode="w", encoding="utf-8", newline="") as file:
@@ -23,12 +23,12 @@ class UsuarioService:
                 writer.writerow(["user_id", "nombre", "correo", "telefono"])
 
     @staticmethod
-    # Lee todos los usuarios del CSV y retorna la lista
+    # Read all users from CSV and return the list
     def cargar_usuarios() -> List[Usuario]:
-        """Cargar todos los usuarios desde el CSV.
+        """Load all users from the CSV.
 
-        Parámetros: ninguno.
-        Retorna: lista de Usuario (puede estar vacía).
+        Parameters: none.
+        Returns: list of Usuario (may be empty).
         """
         UsuarioService._ensure_file_exists()
         usuarios = []
@@ -39,13 +39,13 @@ class UsuarioService:
         return usuarios
 
     @staticmethod
-    # Sobrescribe el CSV con la lista de usuarios proporcionada
+    # Overwrite the CSV with the provided users list
     def guardar_usuarios(usuarios: List[Usuario]):
-        """Guardar la lista completa de usuarios en el CSV (sobrescribe).
+        """Save the complete users list to the CSV (overwrites).
 
-        Parámetros:
-        - usuarios: List[Usuario] a serializar.
-        Retorna: None (efecto lateral: escribe el archivo).
+        Parameters:
+        - usuarios: List[Usuario] to serialize.
+        Returns: None (side effect: writes the file).
         """
         with open(CSV_PATH, mode="w", encoding="utf-8", newline="") as file:
             fieldnames = ["user_id", "nombre", "correo", "telefono"]
@@ -55,13 +55,13 @@ class UsuarioService:
                 writer.writerow(u.__dict__)
 
     @staticmethod
-    # Busca un usuario por su ID, o None si no existe
+    # Find a user by ID, or None if it doesn't exist
     def obtener_por_id(user_id: str) -> Optional[Usuario]:
-        """Buscar un usuario por su user_id.
+        """Find a user by their user_id.
 
-        Parámetros:
-        - user_id: identificador del usuario (str).
-        Retorna: Usuario si se encuentra, otherwise None.
+        Parameters:
+        - user_id: user identifier (str).
+        Returns: Usuario if found, otherwise None.
         """
         for u in UsuarioService.cargar_usuarios():
             if u.user_id == user_id:
@@ -69,17 +69,17 @@ class UsuarioService:
         return None
 
     @staticmethod
-    # Crea un usuario si no hay duplicado de user_id
+    # Create a user if there's no duplicate user_id
     def crear(usuario: Usuario):
-        """Crear un nuevo usuario si no existe otro con el mismo user_id.
+        """Create a new user if there is no other with the same user_id.
 
-        Parámetros:
-        - usuario: instancia Usuario a crear.
-        Retorna: el Usuario creado o None si ya existe duplicado.
+        Parameters:
+        - usuario: Usuario instance to create.
+        Returns: the created Usuario or None if a duplicate already exists.
         """
         usuarios = UsuarioService.cargar_usuarios()
 
-        # evitar duplicados
+        # avoid duplicates
         if any(u.user_id == usuario.user_id for u in usuarios):
             return None
 
@@ -88,14 +88,14 @@ class UsuarioService:
         return usuario
 
     @staticmethod
-    # Actualiza el usuario con ese ID usando los datos dados
+    # Update the user with that ID using provided data
     def actualizar(user_id: str, data: Usuario):
-        """Actualizar un usuario identificado por user_id con los datos proporcionados.
+        """Update a user identified by user_id with the provided data.
 
-        Parámetros:
-        - user_id: id del usuario a actualizar.
-        - data: instancia Usuario con los nuevos datos.
-        Retorna: Usuario actualizado o None si no existe.
+        Parameters:
+        - user_id: id of the user to update.
+        - data: Usuario instance with the new data.
+        Returns: Updated Usuario or None if it does not exist.
         """
         usuarios = UsuarioService.cargar_usuarios()
         for i, u in enumerate(usuarios):
@@ -106,13 +106,13 @@ class UsuarioService:
         return None
 
     @staticmethod
-    # Elimina por ID; retorna True si lo encontró y borró
+    # Delete by ID; returns True if found and removed
     def eliminar(user_id: str):
-        """Eliminar un usuario por user_id.
+        """Delete a user by user_id.
 
-        Parámetros:
-        - user_id: id del usuario a eliminar.
-        Retorna: True si se eliminó, False si no se encontró.
+        Parameters:
+        - user_id: id of the user to delete.
+        Returns: True if deleted, False if not found.
         """
         usuarios = UsuarioService.cargar_usuarios()
         nuevos = [u for u in usuarios if u.user_id != user_id]

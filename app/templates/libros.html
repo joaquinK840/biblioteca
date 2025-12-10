@@ -2,9 +2,9 @@
 <html lang="es">
   <head>
     <!-- ============================================
-         BIBLIOTECA - Gestión de Libros
-         CRUD completo + ordenamientos + búsqueda
-         ============================================ -->
+          LIBRARY - Books Management
+          Full CRUD + sorting + search
+          ============================================ -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Libros - Biblioteca</title>
@@ -18,7 +18,7 @@
       <p>Inventario, ordenamientos y búsquedas</p>
     </header>
 
-    <!-- ========== NAVEGACIÓN ========== -->
+    <!-- ========== NAVIGATION ========== -->
     <nav>
       <a href="/">🏠 Inicio</a>
       <a href="/templates/libros" class="active">📖 Libros</a>
@@ -28,13 +28,13 @@
       <a href="/templates/estanterias">📚 Estanterías</a>
     </nav>
 
-    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <!-- ========== MAIN CONTENT ========== -->
     <div class="container">
-      <!-- ===== SECCIÓN: Lista de Libros ===== -->
+      <!-- ===== SECTION: Book List ===== -->
       <div class="section fade-in">
         <h2>📚 Lista de Libros</h2>
 
-        <!-- Botones de acción para cargar y ordenar -->
+        <!-- Action buttons to load and sort -->
         <div class="form-group">
           <button onclick="cargarLibros()">📋 Cargar Todos</button>
           <button onclick="ordenarPorISBN()" class="btn-success">
@@ -45,7 +45,7 @@
           </button>
         </div>
 
-        <!-- Búsqueda lineal por título/autor -->
+        <!-- Linear search by title/author -->
         <div class="form-group">
           <input
             type="text"
@@ -55,7 +55,7 @@
           <button onclick="buscarLineal()">🔍 Buscar</button>
         </div>
 
-        <!-- Tabla de resultados -->
+        <!-- Results table -->
         <div class="table-container">
           <table>
             <thead>
@@ -74,11 +74,11 @@
           </table>
         </div>
 
-        <!-- Indicador de carga -->
+        <!-- Loading indicator -->
         <div id="loading-libros" class="loading">Cargando...</div>
       </div>
 
-      <!-- ===== SECCIÓN: Agregar Nuevo Libro ===== -->
+      <!-- ===== SECTION: Add New Book ===== -->
       <div class="section fade-in">
         <h2>➕ Agregar Nuevo Libro</h2>
 
@@ -105,7 +105,7 @@
         </button>
       </div>
 
-      <!-- ===== SECCIÓN: Recursión por Autor ===== -->
+      <!-- ===== SECTION: Author Recursion ===== -->
       <div class="section fade-in">
         <h2>📊 Cálculos por Autor (Recursión)</h2>
 
@@ -137,12 +137,12 @@
 
     <!-- ========== SCRIPTS ========== -->
     <script>
-      // URL base de la API
+      // API base URL
       const API_BASE = "http://127.0.0.1:8000";
 
       /**
-       * Cargar todos los libros desde la API
-       * Usa: GET /libros/
+       * Load all books from the API
+       * Uses: GET /libros/
        */
       async function cargarLibros() {
         mostrarLoading("loading-libros", true);
@@ -156,8 +156,8 @@
       }
 
       /**
-       * Ordenar libros por ISBN (Insertion Sort)
-       * Usa: GET /libros/ordenados/isbn
+       * Sort books by ISBN (Insertion Sort)
+       * Uses: GET /libros/ordenados/isbn
        */
       async function ordenarPorISBN() {
         mostrarLoading("loading-libros", true);
@@ -172,8 +172,8 @@
       }
 
       /**
-       * Ordenar libros por precio/valor (Merge Sort)
-       * Usa: GET /libros/ordenados/precio
+       * Sort books by price/value (Merge Sort)
+       * Uses: GET /libros/ordenados/precio
        */
       async function ordenarPorPrecio() {
         mostrarLoading("loading-libros", true);
@@ -188,8 +188,8 @@
       }
 
       /**
-       * Búsqueda lineal por título o autor
-       * Usa: GET /libros/buscar?q=texto
+       * Linear search by title or author
+       * Uses: GET /libros/buscar?q=texto
        */
       async function buscarLineal() {
         const texto = document.getElementById("buscar-texto").value.trim();
@@ -213,8 +213,8 @@
       }
 
       /**
-       * Crear un nuevo libro
-       * Usa: POST /libros/
+       * Create a new book
+       * Uses: POST /libros/
        */
       async function crearLibro() {
         const data = {
@@ -246,8 +246,8 @@
       }
 
       /**
-       * Calcular valor total de libros por autor (Recursión de Pila)
-       * Usa: GET /libros/autor/{autor}/valor-total
+       * Calculate total value of books by author (Stack recursion)
+       * Uses: GET /libros/autor/{autor}/valor-total
        */
       async function valorTotalAutor() {
         const autor = document.getElementById("autor-calculo").value.trim();
@@ -271,8 +271,8 @@
       }
 
       /**
-       * Calcular peso promedio de libros por autor (Recursión de Cola)
-       * Usa: GET /libros/autor/{autor}/peso-promedio
+       * Calculate average weight of books by author (Tail recursion)
+       * Uses: GET /libros/autor/{autor}/peso-promedio
        */
       async function pesoPromedioAutor() {
         const autor = document.getElementById("autor-calculo").value.trim();
@@ -299,10 +299,10 @@
         }
       }
 
-      // ========== FUNCIONES AUXILIARES ==========
+      // ========== HELPER FUNCTIONS ==========
 
       /**
-       * Renderiza la tabla de libros con los datos recibidos
+       * Render the books table with received data
        */
       function renderTablaLibros(libros) {
         const tabla = document.getElementById("tabla-libros");
@@ -350,7 +350,7 @@
         alert("❌ " + msg);
       }
 
-      // Cargar libros al iniciar la página
+      // Load books on page start
       document.addEventListener("DOMContentLoaded", cargarLibros);
     </script>
   </body>

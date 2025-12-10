@@ -2,7 +2,7 @@
 
 class Libro2:
     def __init__(self, isbn, titulo, autor, peso, valor, stock, paginas, editorial, idioma):
-        # copiar todo igual que Libro
+        # Copy all fields same as Libro
         self.isbn = isbn
         self.titulo = titulo
         self.autor = autor
@@ -13,5 +13,5 @@ class Libro2:
         self.editorial = editorial
         self.idioma = idioma
 
-        # pero aquí sí agregamos la columna nueva
-        self.estanteria = 0   # por defecto sin asignar
+        # Add the new column here
+        self.estanteria = 0   # default: unassigned

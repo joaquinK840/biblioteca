@@ -3,24 +3,24 @@ from app.schemas.estanterias_optimas_schema import (EstanteriaOptima,
                                                     EstanteriasOptimasResponse)
 
 
-# Convierte el resultado del algoritmo a los schemas de respuesta
+# Adapter: convert algorithm result into API response schemas
 def adaptar_estanterias_optimas(resultado_algo):
-    """Adaptador: convierte la salida del algoritmo de estanterías al schema de respuesta.
-    
-    Función:
+    """Adapter: converts the shelf algorithm output into the response schema.
+
+    Function:
     - adaptar_estanterias_optimas(resultado_algo)
-      - Recibe:
-        * resultado_algo: dict con clave "resultado" conteniendo lista de dicts con claves:
+      - Receives:
+        * resultado_algo: dict with key "resultado" containing a list of dicts with keys:
           - "estanteria", "libros", "peso_total", "precio_total"
-      - Devuelve:
-        * Instancia de EstanteriasOptimasResponse (schema) con la lista de EstanteriaOptima.
-      - Requiere:
-        * Que los schemas EstanteriaOptima y EstanteriasOptimasResponse estén disponibles e importables.
+      - Returns:
+        * EstanteriasOptimasResponse instance with a list of EstanteriaOptima objects.
+      - Requires:
+        * Schemas EstanteriaOptima and EstanteriasOptimasResponse to be importable.
     """
-    estanterias = []  # Lista de objetos EstanteriaOptima para la respuesta
+    estanterias = []  # List of EstanteriaOptima objects for the response
 
     for est in resultado_algo["resultado"]:
-        # Crear el objeto de estantería óptima a partir del dict del algoritmo
+        # Build EstanteriaOptima from the algorithm's dict
         estanterias.append(
             EstanteriaOptima(
                 estanteria=est["estanteria"],
@@ -30,5 +30,5 @@ def adaptar_estanterias_optimas(resultado_algo):
             )
         )
 
-    # Envolver la lista en el schema de respuesta
+    # Wrap the list in the response schema
     return EstanteriasOptimasResponse(resultado=estanterias)

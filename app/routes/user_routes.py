@@ -6,25 +6,25 @@ router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
 
 @router.get("/")
 def listar():
-    """Listar todos los usuarios"""
+    """List all users"""
     return UsuarioController.listar_usuarios()
 
 @router.get("/{user_id}")
 def obtener(user_id: str):
-    """Obtener un usuario por ID"""
+    """Get a user by ID"""
     return UsuarioController.obtener_usuario(user_id)
 
 @router.post("/")
 def crear(data: UsuarioCreate):
-    """Crear un nuevo usuario"""
+    """Create a new user"""
     return UsuarioController.crear_usuario(data)
 
 @router.put("/{user_id}")
 def actualizar(user_id: str, data: UsuarioUpdate):
-    """Actualizar un usuario por ID"""
+    """Update a user by ID"""
     return UsuarioController.actualizar_usuario(user_id, data)
 
 @router.delete("/{user_id}")
 def eliminar(user_id: str):
-    """Eliminar un usuario por ID"""
+    """Delete a user by ID"""
     return UsuarioController.eliminar_usuario(user_id)

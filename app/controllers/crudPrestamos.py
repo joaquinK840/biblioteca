@@ -4,43 +4,43 @@ from app.schemas.prestamo_schema import PrestamoCreate, PrestamoUpdate
 from app.services.prestamo_service import PrestamoService
 
 
-# Controlador de préstamos: usa PrestamoService y maneja errores HTTP
+# Loans controller: uses PrestamoService and handles HTTP errors
 class PrestamoController:
 
     @staticmethod
-    # Lista todos los préstamos
+    # List all loans
     def listar_prestamos():
-        """Obtener todos los préstamos.
+        """Get all loans.
 
-        Parámetros: ninguno.
-        Retorna: List[Prestamo] (lista de préstamos).
+        Parameters: none.
+        Returns: List[Prestamo] (list of loans).
         """
         return PrestamoService.listar()
 
     @staticmethod
-    # Obtiene un préstamo por ID o 404 si no existe
+    # Get a loan by ID or 404 if not found
     def obtener_prestamo(prestamo_id: str):
-        """Obtener un préstamo por su ID.
+        """Get a loan by its ID.
 
-        Parámetros:
+        Parameters:
         - prestamo_id: str
-        Retorna: Prestamo si existe.
-        Lanza: HTTPException 404 si no se encuentra.
+        Returns: Prestamo if it exists.
+        Raises: HTTPException 404 if not found.
         """
         prestamo = PrestamoService.obtener_por_id(prestamo_id)
         if not prestamo:
-            raise HTTPException(status_code=404, detail="Préstamo no encontrado")
+            raise HTTPException(status_code=404, detail="Loan not found")
         return prestamo
 
     @staticmethod
-    # Crea un préstamo validando usuario/libro/stock
+    # Create a loan validating user/book/stock
     def crear_prestamo(data: PrestamoCreate):
-        """Crear un nuevo préstamo.
+        """Create a new loan.
 
-        Parámetros:
+        Parameters:
         - data: PrestamoCreate (user_id, isbn).
-        Retorna: Prestamo creado.
-        Lanza: HTTPException 400 si la creación falla (usuario/libro inválido o sin stock).
+        Returns: Created Prestamo.
+        Raises: HTTPException 400 if creation fails (invalid user/book or out of stock).
         """
         nuevo = PrestamoService.crear(
             user_id=data.user_id,
@@ -49,49 +49,49 @@ class PrestamoController:
         if not nuevo:
             raise HTTPException(
                 status_code=400,
-                detail="No se pudo crear el préstamo (usuario/libro inválido o sin stock)",
+                detail="Could not create loan (invalid user/book or out of stock)",
             )
         return nuevo
 
     @staticmethod
-    # Registra devolución y desencadena asignación de reservas
+    # Register return and trigger reservation assignment
     def registrar_devolucion(prestamo_id: str):
-        """Registrar la devolución de un préstamo.
+        """Register the return of a loan.
 
-        Parámetros:
+        Parameters:
         - prestamo_id: str
-        Retorna: Prestamo actualizado.
-        Lanza: HTTPException 404 si no existe el préstamo.
+        Returns: Updated Prestamo.
+        Raises: HTTPException 404 if the loan does not exist.
         """
         actualizado = PrestamoService.registrar_devolucion(prestamo_id)
         if not actualizado:
-            raise HTTPException(status_code=404, detail="Préstamo no encontrado")
+            raise HTTPException(status_code=404, detail="Loan not found")
         return actualizado
 
     @staticmethod
-    # Elimina un préstamo por ID; retorna mensaje de éxito
+    # Delete a loan by ID; return success message
     def eliminar_prestamo(prestamo_id: str):
-        """Eliminar un préstamo por ID.
+        """Delete a loan by ID.
 
-        Parámetros:
+        Parameters:
         - prestamo_id: str
-        Retorna: dict con mensaje de éxito.
-        Lanza: HTTPException 404 si no se encuentra.
+        Returns: dict with success message.
+        Raises: HTTPException 404 if not found.
         """
         eliminado = PrestamoService.eliminar(prestamo_id)
         if not eliminado:
-            raise HTTPException(status_code=404, detail="Préstamo no encontrado")
-        return {"message": "Préstamo eliminado"}
+            raise HTTPException(status_code=404, detail="Loan not found")
+        return {"message": "Loan deleted"}
 
     @staticmethod
-    # Devuelve historial de préstamos del usuario como lista (LIFO)
+    # Return user's loan history as a list (LIFO)
     def historial_usuario(user_id: str):
-        """Obtener historial de préstamos de un usuario.
+        """Get a user's loan history.
 
-        Parámetros:
+        Parameters:
         - user_id: str
-        Retorna: lista de préstamos en orden LIFO (último primero).
+        Returns: list of loans in LIFO order (last first).
         """
         pila = PrestamoService.historial_por_usuario(user_id)
-        # devolvemos como lista (LIFO: último préstamo primero)
+        # return as list (LIFO: latest loan first)
         return pila.to_list()

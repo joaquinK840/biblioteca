@@ -5,60 +5,60 @@ from app.schemas.user_schema import UsuarioCreate, UsuarioOut, UsuarioUpdate
 from app.services.user_service import UsuarioService
 
 
-# Controlador de usuarios: orquesta UsuarioService y maneja errores HTTP
+# Users controller: orchestrates UsuarioService and handles HTTP errors
 class UsuarioController:
 
     @staticmethod
-    # Lista todos los usuarios
+    # List all users
     def listar_usuarios():
-        """Listar todos los usuarios.
+        """List all users.
 
-        Parámetros: ninguno.
-        Retorna: List[Usuario].
+        Parameters: none.
+        Returns: List[Usuario].
         """
         return UsuarioService.cargar_usuarios()
 
     @staticmethod
-    # Obtiene un usuario por ID o 404 si no existe
+    # Get a user by ID or 404 if not found
     def obtener_usuario(user_id: str):
-        """Obtener un usuario por ID.
+        """Get a user by ID.
 
-        Parámetros:
+        Parameters:
         - user_id: str
-        Retorna: Usuario si existe.
-        Lanza: HTTPException 404 si no se encuentra.
+        Returns: Usuario if it exists.
+        Raises: HTTPException 404 if not found.
         """
         usuario = UsuarioService.obtener_por_id(user_id)
         if not usuario:
-            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+            raise HTTPException(status_code=404, detail="User not found")
         return usuario
 
     @staticmethod
-    # Crea un usuario a partir del schema de entrada
+    # Create a user from the input schema
     def crear_usuario(data: UsuarioCreate):
-        """Crear un nuevo usuario.
+        """Create a new user.
 
-        Parámetros:
+        Parameters:
         - data: UsuarioCreate
-        Retorna: Usuario creado.
-        Lanza: HTTPException 400 si el ID ya existe.
+        Returns: Created Usuario.
+        Raises: HTTPException 400 if the ID already exists.
         """
         usuario = Usuario(**data.dict())
         nuevo = UsuarioService.crear(usuario)
         if not nuevo:
-            raise HTTPException(status_code=400, detail="El ID ya existe")
+            raise HTTPException(status_code=400, detail="ID already exists")
         return nuevo
 
     @staticmethod
-    # Actualiza un usuario por ID con los datos del schema
+    # Update a user by ID using schema data
     def actualizar_usuario(user_id: str, data: UsuarioUpdate):
-        """Actualizar un usuario por ID.
+        """Update a user by ID.
 
-        Parámetros:
+        Parameters:
         - user_id: str
         - data: UsuarioUpdate
-        Retorna: Usuario actualizado.
-        Lanza: HTTPException 404 si no se encuentra.
+        Returns: Updated Usuario.
+        Raises: HTTPException 404 if not found.
         """
         usuario_actualizado = Usuario(
             user_id=user_id,
@@ -66,20 +66,20 @@ class UsuarioController:
         )
         actualizado = UsuarioService.actualizar(user_id, usuario_actualizado)
         if not actualizado:
-            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+            raise HTTPException(status_code=404, detail="User not found")
         return actualizado
 
     @staticmethod
-    # Elimina un usuario por ID; retorna mensaje de éxito
+    # Delete a user by ID; return success message
     def eliminar_usuario(user_id: str):
-        """Eliminar un usuario por ID.
+        """Delete a user by ID.
 
-        Parámetros:
+        Parameters:
         - user_id: str
-        Retorna: dict con mensaje de éxito.
-        Lanza: HTTPException 404 si no se encuentra.
+        Returns: dict with success message.
+        Raises: HTTPException 404 if not found.
         """
         eliminado = UsuarioService.eliminar(user_id)
         if not eliminado:
-            raise HTTPException(status_code=404, detail="Usuario no encontrado")
-        return {"message": "Usuario eliminado"}
+            raise HTTPException(status_code=404, detail="User not found")
+        return {"message": "User deleted"}

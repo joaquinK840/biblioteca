@@ -2,9 +2,9 @@
 <html lang="es">
   <head>
     <!-- ============================================
-         BIBLIOTECA - Gestión de Préstamos
-         Préstamos, devoluciones e historial (Pila)
-         ============================================ -->
+          LIBRARY - Loans Management
+          Loans, returns and history (Stack)
+          ============================================ -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Préstamos - Biblioteca</title>
@@ -18,7 +18,7 @@
       <p>Préstamos, devoluciones e historial LIFO</p>
     </header>
 
-    <!-- ========== NAVEGACIÓN ========== -->
+    <!-- ========== NAVIGATION ========== -->
     <nav>
       <a href="/">🏠 Inicio</a>
       <a href="/templates/libros">📖 Libros</a>
@@ -28,9 +28,9 @@
       <a href="/templates/estanterias">📚 Estanterías</a>
     </nav>
 
-    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <!-- ========== MAIN CONTENT ========== -->
     <div class="container">
-      <!-- ===== SECCIÓN: Lista de Préstamos ===== -->
+      <!-- ===== SECTION: Active Loans List ===== -->
       <div class="section fade-in">
         <h2>📋 Lista de Préstamos Activos</h2>
 
@@ -38,7 +38,7 @@
           <button onclick="cargarPrestamos()">🔄 Cargar Préstamos</button>
         </div>
 
-        <!-- Tabla de préstamos -->
+        <!-- Loans table -->
         <div class="table-container">
           <table>
             <thead>
@@ -60,7 +60,7 @@
         <div id="loading-prestamos" class="loading">Cargando...</div>
       </div>
 
-      <!-- ===== SECCIÓN: Crear Préstamo ===== -->
+      <!-- ===== SECTION: Create Loan ===== -->
       <div class="section fade-in">
         <h2>➕ Crear Nuevo Préstamo</h2>
         <p>
@@ -76,7 +76,7 @@
         </div>
       </div>
 
-      <!-- ===== SECCIÓN: Registrar Devolución ===== -->
+      <!-- ===== SECTION: Register Return ===== -->
       <div class="section fade-in">
         <h2>↩️ Registrar Devolución</h2>
         <p>
@@ -96,7 +96,7 @@
         </div>
       </div>
 
-      <!-- ===== SECCIÓN: Historial de Usuario (Pila LIFO) ===== -->
+      <!-- ===== SECTION: User History (LIFO Stack) ===== -->
       <div class="section fade-in">
         <h2>📚 Historial del Usuario (Pila LIFO)</h2>
         <p>
@@ -109,7 +109,7 @@
           <button onclick="verHistorial()">🔍 Ver Historial</button>
         </div>
 
-        <!-- Tabla de historial -->
+        <!-- History table -->
         <div class="table-container">
           <table>
             <thead>
@@ -136,12 +136,12 @@
 
     <!-- ========== SCRIPTS ========== -->
     <script>
-      // URL base de la API
+      // API base URL
       const API_BASE = "http://127.0.0.1:8000";
 
       /**
-       * Cargar todos los préstamos desde la API
-       * Usa: GET /prestamos/
+       * Load all loans from the API
+       * Uses: GET /prestamos/
        */
       async function cargarPrestamos() {
         mostrarLoading("loading-prestamos", true);
@@ -155,9 +155,9 @@
       }
 
       /**
-       * Crear un nuevo préstamo
-       * Usa: POST /prestamos/
-       * Requiere: usuario válido, libro con stock > 0
+       * Create a new loan
+       * Uses: POST /prestamos/
+       * Requires: valid user, book with stock > 0
        */
       async function crearPrestamo() {
         const data = {
@@ -184,9 +184,9 @@
       }
 
       /**
-       * Registrar devolución de un préstamo
-       * Usa: PUT /prestamos/devolver/{id}
-       * Activa: búsqueda binaria + asignación de reservas
+       * Register loan return
+       * Uses: PUT /prestamos/devolver/{id}
+       * Triggers: binary search + reservation assignment
        */
       async function registrarDevolucion() {
         const id = document.getElementById("devol_prestamo").value.trim();
@@ -209,8 +209,8 @@
       }
 
       /**
-       * Ver historial de préstamos de un usuario (Pila LIFO)
-       * Usa: GET /prestamos/historial/{user_id}
+       * View user's loan history (LIFO Stack)
+       * Uses: GET /prestamos/historial/{user_id}
        */
       async function verHistorial() {
         const uid = document.getElementById("hist_uid").value.trim();
@@ -232,10 +232,10 @@
         }
       }
 
-      // ========== FUNCIONES AUXILIARES ==========
+      // ========== HELPER FUNCTIONS ==========
 
       /**
-       * Renderiza la tabla de préstamos
+       * Render the loans table
        */
       function renderTablaPrestamos(prestamos) {
         const tabla = document.getElementById("tabla-prestamos");
@@ -259,7 +259,7 @@
       }
 
       /**
-       * Renderiza la tabla de historial (Pila)
+       * Render the history table (Stack)
        */
       function renderTablaHistorial(historial) {
         const tabla = document.getElementById("tabla-historial");
@@ -294,7 +294,7 @@
         alert("❌ " + msg);
       }
 
-      // Cargar préstamos al iniciar
+      // Load loans on page start
       document.addEventListener("DOMContentLoaded", cargarPrestamos);
     </script>
   </body>

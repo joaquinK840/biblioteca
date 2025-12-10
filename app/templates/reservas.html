@@ -2,9 +2,9 @@
 <html lang="es">
   <head>
     <!-- ============================================
-         BIBLIOTECA - Gestión de Reservas
-         Cola FIFO para libros sin stock
-         ============================================ -->
+          LIBRARY - Reservations Management
+          FIFO queue for out-of-stock books
+          ============================================ -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Reservas - Biblioteca</title>
@@ -18,7 +18,7 @@
       <p>Cola de espera FIFO para libros sin stock</p>
     </header>
 
-    <!-- ========== NAVEGACIÓN ========== -->
+    <!-- ========== NAVIGATION ========== -->
     <nav>
       <a href="/">🏠 Inicio</a>
       <a href="/templates/libros">📖 Libros</a>
@@ -28,9 +28,9 @@
       <a href="/templates/estanterias">📚 Estanterías</a>
     </nav>
 
-    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <!-- ========== MAIN CONTENT ========== -->
     <div class="container">
-      <!-- ===== SECCIÓN: Lista de Reservas ===== -->
+      <!-- ===== SECTION: Reservations List ===== -->
       <div class="section fade-in">
         <h2>📋 Lista de Reservas</h2>
         <p>
@@ -41,7 +41,7 @@
           <button onclick="cargarReservas()">🔄 Cargar Reservas</button>
         </div>
 
-        <!-- Tabla de reservas -->
+        <!-- Reservations table -->
         <div class="table-container">
           <table>
             <thead>
@@ -61,7 +61,7 @@
         <div id="loading-reservas" class="loading">Cargando...</div>
       </div>
 
-      <!-- ===== SECCIÓN: Crear Reserva ===== -->
+      <!-- ===== SECTION: Create Reservation ===== -->
       <div class="section fade-in">
         <h2>➕ Crear Nueva Reserva</h2>
         <p>
@@ -78,7 +78,7 @@
         </div>
       </div>
 
-      <!-- ===== SECCIÓN: Cola FIFO por Libro ===== -->
+      <!-- ===== SECTION: FIFO Queue per Book ===== -->
       <div class="section fade-in">
         <h2>📚 Cola de Espera FIFO</h2>
         <p>
@@ -91,7 +91,7 @@
           <button onclick="verCola()">🔍 Ver Cola</button>
         </div>
 
-        <!-- Tabla de cola FIFO -->
+        <!-- FIFO queue table -->
         <div class="table-container">
           <table>
             <thead>
@@ -117,12 +117,12 @@
 
     <!-- ========== SCRIPTS ========== -->
     <script>
-      // URL base de la API
+      // API base URL
       const API_BASE = "http://127.0.0.1:8000";
 
       /**
-       * Cargar todas las reservas desde la API
-       * Usa: GET /reservas/
+       * Load all reservations from the API
+       * Uses: GET /reservas/
        */
       async function cargarReservas() {
         mostrarLoading("loading-reservas", true);
@@ -136,9 +136,9 @@
       }
 
       /**
-       * Crear una nueva reserva
-       * Usa: POST /reservas/
-       * Requisito: El libro debe tener stock = 0
+       * Create a new reservation
+       * Uses: POST /reservas/
+       * Requirement: The book must have stock = 0
        */
       async function crearReserva() {
         const data = {
@@ -163,8 +163,8 @@
       }
 
       /**
-       * Ver cola FIFO de reservas para un libro específico
-       * Usa: GET /reservas/cola/{isbn}
+       * View FIFO queue of reservations for a specific book
+       * Uses: GET /reservas/cola/{isbn}
        */
       async function verCola() {
         const isbn = document.getElementById("cola_isbn").value.trim();
@@ -184,10 +184,10 @@
         }
       }
 
-      // ========== FUNCIONES AUXILIARES ==========
+      // ========== HELPER FUNCTIONS ==========
 
       /**
-       * Renderiza la tabla de reservas
+       * Render the reservations table
        */
       function renderTablaReservas(reservas) {
         const tabla = document.getElementById("tabla-reservas");
@@ -206,7 +206,7 @@
       }
 
       /**
-       * Renderiza la tabla de cola FIFO con posiciones
+       * Render the FIFO queue table with positions
        */
       function renderTablaCola(cola) {
         const tabla = document.getElementById("tabla-cola");
@@ -239,7 +239,7 @@
         alert("❌ " + msg);
       }
 
-      // Cargar reservas al iniciar
+      // Load reservations on page start
       document.addEventListener("DOMContentLoaded", cargarReservas);
     </script>
   </body>

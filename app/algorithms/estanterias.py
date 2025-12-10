@@ -1,21 +1,21 @@
 from itertools import combinations
 
-PESO_MAX = 8  # 8 Kg máximo permitido
+PESO_MAX = 8  # 8 Kg maximum allowed
 
 
 # ============================================================
-#   1) FUERZA BRUTA - Combinaciones de 4 libros que superen 8kg
+#   1) BRUTE FORCE - Combinations of 4 books exceeding 8 kg
 # ============================================================
 
 def combinaciones_peligrosas(libros):
     """
-    Retorna TODAS las combinaciones posibles de 4 libros 
-    cuyo peso total supera 8 Kg (fuerza bruta real).
+    Returns ALL possible combinations of 4 books
+    whose total weight exceeds 8 kg (true brute force).
     """
 
     peligrosas = []
 
-    # todas las combinaciones de 4 libros
+    # all combinations of 4 books
     for combo in combinations(libros, 4):
         peso_total = sum([libro.peso for libro in combo])
 
@@ -29,23 +29,23 @@ def combinaciones_peligrosas(libros):
 
 
 # ============================================================
-#   2) BACKTRACKING - Maximizar VALOR sin exceder 8 Kg
+#   2) BACKTRACKING - Maximize VALUE without exceeding 8 kg
 # ============================================================
 
 def estanteria_optima(libros):
     """
-    Usa backtracking para encontrar la combinación de libros
-    que produce el MAYOR valor posible sin exceder 8 Kg.
+    Uses backtracking to find the combination of books
+    that yields the HIGHEST possible value without exceeding 8 kg.
     """
 
     mejor_valor = 0
     mejor_combinacion = []
-    exploracion = []  # lista de estados visitados (para mostrar la lógica)
+    exploracion = []  # list of visited states (to show the reasoning)
 
     def backtracking(indice, peso_actual, valor_actual, seleccion):
         nonlocal mejor_valor, mejor_combinacion
 
-        # Registrar exploración (OPCIONAL: puedes imprimirlo)
+        # Track exploration (OPTIONAL: you can print it)
         exploracion.append({
             "indice": indice,
             "peso": peso_actual,
@@ -53,11 +53,11 @@ def estanteria_optima(libros):
             "seleccion": [libro.titulo for libro in seleccion]
         })
 
-        # Caso base: peso excedido → retroceder
+        # Base case: weight exceeded → backtrack
         if peso_actual > PESO_MAX:
             return
 
-        # Caso base: sin más libros
+        # Base case: no more books
         if indice == len(libros):
             if valor_actual > mejor_valor:
                 mejor_valor = valor_actual
@@ -67,7 +67,7 @@ def estanteria_optima(libros):
         libro = libros[indice]
 
         # -----------------------
-        # 1. Incluir libro actual
+        # 1. Include current book
         # -----------------------
         backtracking(
             indice + 1,
@@ -77,7 +77,7 @@ def estanteria_optima(libros):
         )
 
         # -----------------------
-        # 2. Excluir libro actual
+        # 2. Exclude current book
         # -----------------------
         backtracking(
             indice + 1,
@@ -86,7 +86,7 @@ def estanteria_optima(libros):
             seleccion
         )
 
-    # Llamar algoritmo iniciando en 0
+    # Call algorithm starting at index 0
     backtracking(0, 0, 0, [])
 
     return {
